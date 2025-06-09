@@ -1,0 +1,41 @@
+service: api-compras
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: dev
+  region: us-east-1
+
+functions:
+  createCompra:
+    handler: handler.createCompra
+    events:
+      - httpApi:
+          path: /compras
+          method: post
+  getCompra:
+    handler: handler.getCompra
+    events:
+      - httpApi:
+          path: /compras/{id}
+          method: get
+  updateCompra:
+    handler: handler.updateCompra
+    events:
+      - httpApi:
+          path: /compras/{id}
+          method: put
+  deleteCompra:
+    handler: handler.deleteCompra
+    events:
+      - httpApi:
+          path: /compras/{id}
+          method: delete
+  listCompras:
+    handler: handler.listCompras
+    events:
+      - httpApi:
+          path: /compras
+          method: get

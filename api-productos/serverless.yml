@@ -1,0 +1,44 @@
+service: api-productos
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x # o la versión de Node.js que prefieras
+  stage: dev
+  region: us-east-1 #
+
+functions:
+  createProduct:
+    handler: handler.createProduct
+    events:
+      - httpApi:
+          path: /products
+          method: post
+  getProduct:
+    handler: handler.getProduct
+    events:
+      - httpApi:
+          path: /products/{id}
+          method: get
+  updateProduct:
+    handler: handler.updateProduct
+    events:
+      - httpApi:
+          path: /products/{id}
+          method: put
+  deleteProduct:
+    handler: handler.deleteProduct
+    events:
+      - httpApi:
+          path: /products/{id}
+          method: delete
+  listProducts:
+    handler: handler.listProducts
+    events:
+      - httpApi:
+          path: /products
+          method: get
+
+# plugins:
+#   - serverless-offline # Descomenta si quieres usar serverless-offline

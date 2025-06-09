@@ -1,0 +1,41 @@
+service: api-usuarios
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: dev
+  region: us-east-1
+
+functions:
+  createUsuario:
+    handler: handler.createUsuario
+    events:
+      - httpApi:
+          path: /usuarios
+          method: post
+  getUsuario:
+    handler: handler.getUsuario
+    events:
+      - httpApi:
+          path: /usuarios/{id}
+          method: get
+  updateUsuario:
+    handler: handler.updateUsuario
+    events:
+      - httpApi:
+          path: /usuarios/{id}
+          method: put
+  deleteUsuario:
+    handler: handler.deleteUsuario
+    events:
+      - httpApi:
+          path: /usuarios/{id}
+          method: delete
+  listUsuarios:
+    handler: handler.listUsuarios
+    events:
+      - httpApi:
+          path: /usuarios
+          method: get
