@@ -1,6 +1,6 @@
 service: api-compras
 
-frameworkVersion: '3'
+frameworkVersion: '4.17.0'
 
 provider:
   name: aws
