@@ -1,1 +1,73 @@
+# .github/workflows/deploy.yml
+name: Deploy Serverless Services to AWS
 
+on:
+  push:
+    branches:
+      - main # Dispara el workflow en cada push a la rama 'main'
+  pull_request:
+    branches:
+      - main # Opcional: También se ejecuta en Pull Requests para validación
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest # El entorno donde se ejecutará tu workflow
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4 # Clona tu repositorio
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Usa la misma versión de Node.js que tus Lambdas
+
+      # No necesitamos instalar Serverless globalmente si usamos la acción aws-actions/configure-aws-credentials
+      # que ya trae el Serverless CLI preinstalado en el runner o si lo manejamos via npm en cada subdirectorio.
+      # Sin embargo, si lo prefieres, puedes mantenerlo, pero es menos necesario si cada servicio tiene su package.json.
+      # Si tus servicios no tienen package.json para npm install, entonces sí, installalo global.
+      # Para mayor consistencia, podemos instalarlo globalmente, aunque npm install en cada repo es más común.
+      - name: Install Serverless Framework (global)
+        run: npm install -g serverless
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: us-east-1 # La región de AWS donde desplegarás todos tus servicios
+
+      - name: Deploy all Serverless services
+        # Aquí definimos un array de los directorios de tus servicios
+        # Asegúrate de que estos nombres coincidan con tus carpetas reales
+        run: |
+          SERVICE_DIRS=(api-usuarios api-productos api-compras)
+          DEPLOY_STAGE="dev" # Define aquí la etapa de despliegue (dev, staging, prod)
+
+          for service_dir in "${SERVICE_DIRS[@]}"; do
+            echo "::group::Deploying service: $service_dir" # Esto crea un grupo colapsable en los logs de GitHub Actions
+            
+            # Navega al directorio del servicio
+            cd "$service_dir"
+            
+            # Instala las dependencias del proyecto para el servicio actual
+            # Esto es crucial si cada servicio tiene su propio package.json
+            if [ -f "package.json" ]; then
+              echo "Installing dependencies for $service_dir..."
+              npm install
+            else
+              echo "No package.json found for $service_dir, skipping npm install."
+            fi
+
+            # Despliega el servicio
+            echo "Deploying $service_dir to AWS stage: $DEPLOY_STAGE"
+            sls deploy --stage "$DEPLOY_STAGE" --verbose # --verbose para ver logs detallados
+
+            # Regresa al directorio raíz del repositorio antes de ir al siguiente servicio
+            cd .. 
+            echo "::endgroup::"
+          done
+        # Opcional: Si tienes variables de entorno específicas para el despliegue
+        # env:
+        #   MY_CUSTOM_VAR: 'some_value'
