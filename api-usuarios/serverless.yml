@@ -28,8 +28,6 @@ functions:
           method: get
           cors: true
           integration: lambda
-          cors: true
-          integration: lambda
   updateUsuario:
     handler: handler.updateUsuario
     events:
