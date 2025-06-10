@@ -12,7 +12,10 @@ def lambda_handler(event, context):
     try:
         # Parsear el cuerpo del evento si viene como string
         if 'body' in event:
-            body = json.loads(event['body'])
+            if isinstance(event['body'], str):
+                body = json.loads(event['body'])
+            else:
+                body = event['body'] # Si ya es un diccionario, usarlo directamente
         else:
             body = event
 
