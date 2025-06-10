@@ -15,23 +15,23 @@ functions:
   createUsuario:
     handler: handler.createUsuario
     events:
-      - httpApi:
+      - http:
           path: /usuarios
-          method: post
+          method: get
           cors: true
           integration: lambda
   getUsuario:
     handler: handler.getUsuario
     events:
-      - httpApi:
-          path: /usuarios
+      - http:
+          path: /usuarios/{id}
           method: get
           cors: true
           integration: lambda
   updateUsuario:
     handler: handler.updateUsuario
     events:
-      - httpApi:
+      - http:
           path: /usuarios/{id}
           method: put
           cors: true
@@ -39,7 +39,7 @@ functions:
   deleteUsuario:
     handler: handler.deleteUsuario
     events:
-      - httpApi:
+      - http:
           path: /usuarios/{id}
           method: delete
           cors: true

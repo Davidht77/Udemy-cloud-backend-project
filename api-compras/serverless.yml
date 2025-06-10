@@ -15,7 +15,7 @@ functions:
   createCompra:
     handler: handler.createCompra
     events:
-      - httpApi:
+      - http:
           path: /compras
           method: post
           cors: true
@@ -23,7 +23,7 @@ functions:
   getCompra:
     handler: handler.getCompra
     events:
-      - httpApi:
+      - http:
           path: /compras/{id}
           method: get
           cors: true
@@ -31,7 +31,7 @@ functions:
   updateCompra:
     handler: handler.updateCompra
     events:
-      - httpApi:
+      - http:
           path: /compras/{id}
           method: put
           cors: true
@@ -39,7 +39,7 @@ functions:
   deleteCompra:
     handler: handler.deleteCompra
     events:
-      - httpApi:
+      - http:
           path: /compras/{id}
           method: delete
           cors: true
@@ -47,7 +47,7 @@ functions:
   listCompras:
     handler: handler.listCompras
     events:
-      - httpApi:
+      - http:
           path: /compras
           method: get
           cors: true

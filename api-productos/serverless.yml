@@ -15,7 +15,7 @@ functions:
   createProduct:
     handler: handler.createProduct
     events:
-      - httpApi:
+      - http:
           path: /products
           method: post
           cors: true
@@ -23,7 +23,7 @@ functions:
   getProduct:
     handler: handler.getProduct
     events:
-      - httpApi:
+      - http:
           path: /products/{id}
           method: get
           cors: true
@@ -31,7 +31,7 @@ functions:
   updateProduct:
     handler: handler.updateProduct
     events:
-      - httpApi:
+      - http:
           path: /products/{id}
           method: put
           cors: true
@@ -39,7 +39,7 @@ functions:
   deleteProduct:
     handler: handler.deleteProduct
     events:
-      - httpApi:
+      - http:
           path: /products/{id}
           method: delete
           cors: true
@@ -47,7 +47,7 @@ functions:
   listProducts:
     handler: handler.listProducts
     events:
-      - httpApi:
+      - http:
           path: /products
           method: get
           cors: true
