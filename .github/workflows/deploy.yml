@@ -62,7 +62,7 @@ jobs:
 
             # Despliega el servicio
             echo "Deploying $service_dir to AWS stage: $DEPLOY_STAGE"
-            sls deploy --stage "$DEPLOY_STAGE" --verbose --no-dashboard
+            sls deploy --stage "$DEPLOY_STAGE" --verbose
 
             # Regresa al directorio raíz del repositorio antes de ir al siguiente servicio
             cd .. 
