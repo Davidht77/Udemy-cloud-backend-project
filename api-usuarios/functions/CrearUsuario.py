@@ -47,7 +47,7 @@ def lambda_handler(event, context):
             }
             return {
                 'statusCode': 200,
-                'body': json.dumps(mensaje) # Asegúrate de serializar el mensaje a JSON
+                'body': mensaje # Asegúrate de serializar el mensaje a JSON
             }
         else:
             mensaje = {
@@ -55,7 +55,7 @@ def lambda_handler(event, context):
             }
             return {
                 'statusCode': 400,
-                'body': json.dumps(mensaje) # Asegúrate de serializar el mensaje a JSON
+                'body': mensaje # Asegúrate de serializar el mensaje a JSON
             }
 
     except Exception as e:
@@ -66,5 +66,5 @@ def lambda_handler(event, context):
         }        
         return {
             'statusCode': 500,
-            'body': json.dumps(mensaje) # Asegúrate de serializar el mensaje a JSON
+            'body': mensaje # Asegúrate de serializar el mensaje a JSON
         }
