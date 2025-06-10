@@ -28,7 +28,7 @@ jobs:
       # Si tus servicios no tienen package.json para npm install, entonces sí, installalo global.
       # Para mayor consistencia, podemos instalarlo globalmente, aunque npm install en cada repo es más común.
       - name: Install Serverless Framework (global)
-        run: npm install -g serverless
+        run: npm install -g serverless@3
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
