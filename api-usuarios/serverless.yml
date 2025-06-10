@@ -5,6 +5,8 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs18.x
+  iam:
+    role: arn:aws:iam::052406042369:role/LabRole
   stage: dev
   region: us-east-1
 
