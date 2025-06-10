@@ -20,7 +20,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Usa la misma versión de Node.js que tus Lambdas
+          node-version: '18' # Usa la misma versión de Node.js que tus Lambdas
 
       # No necesitamos instalar Serverless globalmente si usamos la acción aws-actions/configure-aws-credentials
       # que ya trae el Serverless CLI preinstalado en el runner o si lo manejamos via npm en cada subdirectorio.

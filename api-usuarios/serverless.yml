@@ -5,6 +5,7 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs18.x
+  timeout: 30  
   iam:
     role: arn:aws:iam::052406042369:role/LabRole
   stage: dev
@@ -17,27 +18,37 @@ functions:
       - httpApi:
           path: /usuarios
           method: post
+          cors: true
+          integration: lambda
   getUsuario:
     handler: handler.getUsuario
     events:
       - httpApi:
-          path: /usuarios/{id}
+          path: /usuarios
           method: get
+          cors: true
+          integration: lambda
+          cors: true
+          integration: lambda
   updateUsuario:
     handler: handler.updateUsuario
     events:
       - httpApi:
           path: /usuarios/{id}
           method: put
+          cors: true
+          integration: lambda
   deleteUsuario:
     handler: handler.deleteUsuario
     events:
       - httpApi:
           path: /usuarios/{id}
           method: delete
+          cors: true
+          integration: lambda
   listUsuarios:
     handler: handler.listUsuarios
     events:
-      - httpApi:
+      - http:
           path: /usuarios
           method: get

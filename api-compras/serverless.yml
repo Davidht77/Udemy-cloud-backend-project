@@ -5,6 +5,7 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs18.x
+  timeout: 30
   iam:
     role: arn:aws:iam::052406042369:role/LabRole
   stage: dev
@@ -17,27 +18,37 @@ functions:
       - httpApi:
           path: /compras
           method: post
+          cors: true
+          integration: lambda
   getCompra:
     handler: handler.getCompra
     events:
       - httpApi:
           path: /compras/{id}
           method: get
+          cors: true
+          integration: lambda
   updateCompra:
     handler: handler.updateCompra
     events:
       - httpApi:
           path: /compras/{id}
           method: put
+          cors: true
+          integration: lambda
   deleteCompra:
     handler: handler.deleteCompra
     events:
       - httpApi:
           path: /compras/{id}
           method: delete
+          cors: true
+          integration: lambda
   listCompras:
     handler: handler.listCompras
     events:
       - httpApi:
           path: /compras
           method: get
+          cors: true
+          integration: lambda

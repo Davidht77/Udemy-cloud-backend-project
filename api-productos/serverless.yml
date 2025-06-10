@@ -5,6 +5,7 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs18.x # o la versión de Node.js que prefieras
+  timeout: 30  
   iam:
     role: arn:aws:iam::052406042369:role/LabRole
   stage: dev
@@ -17,30 +18,40 @@ functions:
       - httpApi:
           path: /products
           method: post
+          cors: true
+          integration: lambda
   getProduct:
     handler: handler.getProduct
     events:
       - httpApi:
           path: /products/{id}
           method: get
+          cors: true
+          integration: lambda
   updateProduct:
     handler: handler.updateProduct
     events:
       - httpApi:
           path: /products/{id}
           method: put
+          cors: true
+          integration: lambda
   deleteProduct:
     handler: handler.deleteProduct
     events:
       - httpApi:
           path: /products/{id}
           method: delete
+          cors: true
+          integration: lambda
   listProducts:
     handler: handler.listProducts
     events:
       - httpApi:
           path: /products
           method: get
+          cors: true
+          integration: lambda
 
 # plugins:
 #   - serverless-offline # Descomenta si quieres usar serverless-offline
