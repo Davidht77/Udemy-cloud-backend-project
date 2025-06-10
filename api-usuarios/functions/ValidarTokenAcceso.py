@@ -6,7 +6,7 @@ def lambda_handler(event, context):
     token = event['token']
     # Proceso
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('prod_tokens')
+    table = dynamodb.Table('prod_accessTokens_curses')
     response = table.get_item(
         Key={
             'token': token

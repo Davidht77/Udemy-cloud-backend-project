@@ -15,7 +15,7 @@ def lambda_handler(event, context):
     hashed_password = hash_password(password)
     # Proceso
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('prod_users')
+    table = dynamodb.Table('prod_users_curses')
     response = table.get_item(
         Key={
             'user_id': user_id
@@ -36,7 +36,7 @@ def lambda_handler(event, context):
                 'token': token,
                 'expires': fecha_hora_exp.strftime('%Y-%m-%d %H:%M:%S')
             }
-            table = dynamodb.Table('prod_tokens')
+            table = dynamodb.Table('prod_accessTokens_curses')
             dynamodbResponse = table.put_item(Item = registro)
         else:
             return {
