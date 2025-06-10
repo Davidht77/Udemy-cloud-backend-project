@@ -30,7 +30,7 @@ def lambda_handler(event, context):
             hashed_password = hash_password(password)
             # Conectar DynamoDB
             dynamodb = boto3.resource('dynamodb')
-            t_usuarios = dynamodb.Table('prod_users_curses')
+            t_usuarios = dynamodb.Table('prod_user_curses')
             # Almacena los datos del user en la tabla de usuarios en DynamoDB
             t_usuarios.put_item(
                 Item={
