@@ -1,6 +1,6 @@
 service: api-productos
 
-frameworkVersion: '3.X'
+frameworkVersion: '4'
 
 provider:
   name: aws
