@@ -4,7 +4,7 @@ frameworkVersion: '3'
 
 provider:
   name: aws
-  runtime: nodejs18.x
+  runtime: python3.13
   timeout: 30  
   iam:
     role: arn:aws:iam::385255784123:role/LabRole
@@ -13,40 +13,21 @@ provider:
 
 functions:
   createUsuario:
-    handler: handler.createUsuario
+    handler: functions/CrearUsuario.lambda_handler
     events:
       - http:
-          path: /usuarios
-          method: get
+          path: /usuarios/crear
+          method: post
           cors: true
           integration: lambda
-  getUsuario:
-    handler: handler.getUsuario
+  loginUsuario:
+    handler: functions/LoginUsuario.lambda_handler
     events:
       - http:
-          path: /usuarios/{id}
-          method: get
+          path: /usuarios/login
+          method: post
           cors: true
           integration: lambda
-  updateUsuario:
-    handler: handler.updateUsuario
-    events:
-      - http:
-          path: /usuarios/{id}
-          method: put
-          cors: true
-          integration: lambda
-  deleteUsuario:
-    handler: handler.deleteUsuario
-    events:
-      - http:
-          path: /usuarios/{id}
-          method: delete
-          cors: true
-          integration: lambda
-  listUsuarios:
-    handler: handler.listUsuarios
-    events:
-      - http:
-          path: /usuarios
-          method: get
+  validarToken:
+    handler: functions/ValidarTokenAcceso.lambda_handler
+
