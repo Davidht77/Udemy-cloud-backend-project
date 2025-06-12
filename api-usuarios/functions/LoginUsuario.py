@@ -10,20 +10,12 @@ def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
 def lambda_handler(event, context):
-    if isinstance(event.get('body'), str):
-        try:
-            body = json.loads(event['body'])
-        except json.JSONDecodeError:
-            return {
-                'statusCode': 400,
-                'response': 'Invalid JSON in request body'
-            }
-    else:
-        body = event.get('body', {})
+    body = event
 
     # Entrada (json)
     user_id = body.get('user_id')
     password = body.get('password')
+
 
     if not user_id or not password:
         return {
@@ -43,7 +35,7 @@ def lambda_handler(event, context):
     if 'Item' not in response:
         return {
             'statusCode': 403,
-            'response': 'Usuario no existe'
+            'body': 'Usuario no existe'
         }
     else:
         hashed_password_bd = response['Item']['password']
@@ -60,11 +52,11 @@ def lambda_handler(event, context):
         else:
             return {
                 'statusCode': 403,
-                'response': 'Password incorrecto'
+                'body': 'Password incorrecto'
             }
     
     # Salida (json)
     return {
         'statusCode': 200,
-        'response': {'token': token}
+        'token': token
     }
