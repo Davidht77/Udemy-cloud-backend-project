@@ -47,7 +47,8 @@ def lambda_handler(event, context):
             }
             return {
                 'statusCode': 200,
-                'body': mensaje # Asegúrate de serializar el mensaje a JSON
+                'headers': { 'Content-Type': 'application/json' },
+                'body': json.dumps(mensaje) # Asegúrate de serializar el mensaje a JSON
             }
         else:
             mensaje = {
@@ -55,7 +56,8 @@ def lambda_handler(event, context):
             }
             return {
                 'statusCode': 400,
-                'body': mensaje # Asegúrate de serializar el mensaje a JSON
+                'headers': { 'Content-Type': 'application/json' },
+                'body': json.dumps(mensaje) # Asegúrate de serializar el mensaje a JSON
             }
 
     except Exception as e:
@@ -66,5 +68,6 @@ def lambda_handler(event, context):
         }        
         return {
             'statusCode': 500,
-            'body': mensaje # Asegúrate de serializar el mensaje a JSON
+            'headers': { 'Content-Type': 'application/json' },
+            'body': json.dumps(mensaje) # Asegúrate de serializar el mensaje a JSON
         }
