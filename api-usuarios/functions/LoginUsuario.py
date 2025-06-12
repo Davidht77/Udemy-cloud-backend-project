@@ -10,7 +10,16 @@ def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
 def lambda_handler(event, context):
-    body = event
+    if isinstance(event.get('body'), str):
+        try:
+            body = json.loads(event['body'])
+        except json.JSONDecodeError:
+            return {
+                'statusCode': 400,
+                'body': 'Invalid JSON in request body'
+            }
+    else:
+        body = event.get('body', {})
 
     # Entrada (json)
     user_id = body.get('user_id')
