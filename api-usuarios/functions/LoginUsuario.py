@@ -16,8 +16,7 @@ def lambda_handler(event, context):
         except json.JSONDecodeError:
             return {
                 'statusCode': 400,
-                'headers': { 'Content-Type': 'application/json' },
-                'body': json.dumps('Invalid JSON in request body')
+                'response': 'Invalid JSON in request body'
             }
     else:
         body = event.get('body', {})
@@ -29,14 +28,13 @@ def lambda_handler(event, context):
     if not user_id or not password:
         return {
             'statusCode': 400,
-            'headers': { 'Content-Type': 'application/json' },
-            'body': json.dumps('Missing user_id or password in request body')
+            'response': 'Missing user_id or password in request body'
         }
 
     hashed_password = hash_password(password)
     # Proceso
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('prod_users_curses')
+    table = dynamodb.Table('prod_user_curses')
     response = table.get_item(
         Key={
             'user_id': user_id
@@ -45,8 +43,7 @@ def lambda_handler(event, context):
     if 'Item' not in response:
         return {
             'statusCode': 403,
-            'headers': { 'Content-Type': 'application/json' },
-            'body': json.dumps('Usuario no existe')
+            'response': 'Usuario no existe'
         }
     else:
         hashed_password_bd = response['Item']['password']
@@ -63,13 +60,11 @@ def lambda_handler(event, context):
         else:
             return {
                 'statusCode': 403,
-                'headers': { 'Content-Type': 'application/json' },
-                'body': json.dumps('Password incorrecto')
+                'response': 'Password incorrecto'
             }
     
     # Salida (json)
     return {
         'statusCode': 200,
-        'headers': { 'Content-Type': 'application/json' },
-        'body': json.dumps({'token': token})
+        'response': {'token': token}
     }

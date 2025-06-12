@@ -32,7 +32,7 @@ def lambda_handler(event, context):
             dynamodb = boto3.resource('dynamodb')
             t_usuarios = dynamodb.Table('prod_user_curses')
             # Almacena los datos del user en la tabla de usuarios en DynamoDB
-            t_usuarios.put_item(
+            response = t_usuarios.put_item(
                 Item={
                     'user_id': user_id,
                     'password': hashed_password,
@@ -40,34 +40,20 @@ def lambda_handler(event, context):
                 }
             )
             # Retornar un código de estado HTTP 200 (OK) y un mensaje de éxito
-            mensaje = {
-                'message': 'User registered successfully',
-                'user_id': user_id,
-                'tenant_id': tenant_id
-            }
             return {
                 'statusCode': 200,
-                'headers': { 'Content-Type': 'application/json' },
-                'body': json.dumps(mensaje) # Asegúrate de serializar el mensaje a JSON
+                'response': response
             }
         else:
-            mensaje = {
-                'error': 'Invalid request body: missing user_id, password or tenant_id'
-            }
             return {
                 'statusCode': 400,
-                'headers': { 'Content-Type': 'application/json' },
-                'body': json.dumps(mensaje) # Asegúrate de serializar el mensaje a JSON
+                'response': {'error': 'Invalid request body: missing user_id, password or tenant_id'}
             }
 
     except Exception as e:
         # Excepción y retornar un código de error HTTP 500
         print("Exception:", str(e))
-        mensaje = {
-            'error': str(e)
-        }        
         return {
             'statusCode': 500,
-            'headers': { 'Content-Type': 'application/json' },
-            'body': json.dumps(mensaje) # Asegúrate de serializar el mensaje a JSON
+            'response': {'error': str(e)}
         }
