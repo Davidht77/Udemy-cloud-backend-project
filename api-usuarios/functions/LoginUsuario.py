@@ -2,7 +2,6 @@ import boto3
 import hashlib
 import uuid # Genera valores únicos
 from datetime import datetime, timedelta
-import json
 
 # Hashear contraseña
 def hash_password(password):
@@ -10,34 +9,17 @@ def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
 def lambda_handler(event, context):
-    if isinstance(event.get('body'), str):
-        try:
-            body = json.loads(event['body'])
-        except json.JSONDecodeError:
-            return {
-                'statusCode': 400,
-                'body': 'Invalid JSON in request body'
-            }
-    else:
-        body = event.get('body', {})
-
     # Entrada (json)
-    user_id = body.get('user_id')
-    password = body.get('password')
-
-
-    if not user_id or not password:
-        return {
-            'statusCode': 400,
-            'response': 'Missing user_id or password in request body'
-        }
-
+    user_id = event['user_id']
+    password = event['password']
+    tenant_id = event['tenant_id']  # Add tenant_id to the input
     hashed_password = hash_password(password)
     # Proceso
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('prod_user_curses')
     response = table.get_item(
         Key={
+            'tenant_id': tenant_id,  # Include tenant_id in the key
             'user_id': user_id
         }
     )
