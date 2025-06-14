@@ -9,6 +9,7 @@ def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
 def lambda_handler(event, context):
+    print("Received event:", event) # Add this line to log the incoming event
     # Entrada (json)
     user_id = event['user_id']
     password = event['password']
