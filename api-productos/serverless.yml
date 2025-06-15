@@ -8,50 +8,78 @@ provider:
   timeout: 30  
   iam:
     role: arn:aws:iam::385255784123:role/LabRole
+    # Añadir permisos para DynamoDB
+    statements:
+      - Effect: Allow
+        Action:
+          - dynamodb:GetItem
+          - dynamodb:PutItem
+          - dynamodb:UpdateItem
+          - dynamodb:DeleteItem
+          - dynamodb:Scan
+        Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/prod_cursos_curses"
   stage: dev
   region: us-east-1 #
 
 functions:
-  createProduct:
-    handler: handler.createProduct
+  createCurso:
+    handler: functions/createCurso.createCurso
     events:
       - http:
-          path: /products
+          path: /cursos
           method: post
           cors: true
           integration: lambda
-  getProduct:
-    handler: handler.getProduct
+  getCurso:
+    handler: functions/getCurso.getCurso
     events:
       - http:
-          path: /products/{id}
+          path: /cursos/{id}
           method: get
           cors: true
           integration: lambda
-  updateProduct:
-    handler: handler.updateProduct
+  updateCurso:
+    handler: functions/updateCurso.updateCurso
     events:
       - http:
-          path: /products/{id}
+          path: /cursos/{id}
           method: put
           cors: true
           integration: lambda
-  deleteProduct:
-    handler: handler.deleteProduct
+  deleteCurso:
+    handler: functions/deleteCurso.deleteCurso
     events:
       - http:
-          path: /products/{id}
+          path: /cursos/{id}
           method: delete
           cors: true
           integration: lambda
-  listProducts:
-    handler: handler.listProducts
+  listCursos:
+    handler: functions/listCursos.listCursos
     events:
       - http:
-          path: /products
+          path: /cursos
           method: get
           cors: true
           integration: lambda
+
+resources:
+  Resources:
+    CursosTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: prod_cursos_curses
+        AttributeDefinitions:
+          - AttributeName: tenant_id
+            AttributeType: S
+          - AttributeName: curso_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: tenant_id
+            KeyType: HASH
+          - AttributeName: curso_id
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
 
 # plugins:
 #   - serverless-offline # Descomenta si quieres usar serverless-offline
