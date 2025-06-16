@@ -30,4 +30,10 @@ functions:
           integration: lambda
   validarToken:
     handler: functions/ValidarTokenAcceso.lambda_handler
+    events:
+      - http:
+          path: /usuarios/validarToken
+          method: post
+          cors: true
+          integration: lambda
 
