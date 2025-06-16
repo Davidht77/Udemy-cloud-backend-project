@@ -3,7 +3,7 @@ from datetime import datetime
 
 def lambda_handler(event, context):
     # Entrada (json)
-    token = event['token']
+    token = event['authorizationToken']
     # Proceso
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table('prod_accessTokens_curses')
