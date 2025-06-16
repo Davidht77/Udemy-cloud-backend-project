@@ -14,20 +14,47 @@ def lambda_handler(event, context):
     )
     if 'Item' not in response:
         return {
-            'statusCode': 403,
-            'body': 'Token no existe'
+            "principalId": "user",
+            "policyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                    {
+                        "Action": "execute-api:Invoke",
+                        "Effect": "Deny",
+                        "Resource": event['methodArn']
+                    }
+                ]
+            }
         }
     else:
         expires = response['Item']['expires']
         now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         if now > expires:
             return {
-                'statusCode': 403,
-                'body': 'Token expirado'
+                "principalId": "user",
+                "policyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                        {
+                            "Action": "execute-api:Invoke",
+                            "Effect": "Deny",
+                            "Resource": event['methodArn']
+                        }
+                    ]
+                }
             }
     
     # Salida (json)
     return {
-        'statusCode': 200,
-        'body': 'Token válido'
+        "principalId": "user",
+        "policyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [
+                {
+                    "Action": "execute-api:Invoke",
+                    "Effect": "Allow",
+                    "Resource": event['methodArn']
+                }
+            ]
+        }
     }
