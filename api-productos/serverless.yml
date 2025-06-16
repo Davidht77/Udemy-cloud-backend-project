@@ -36,30 +36,6 @@ functions:
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
-          authorizer:
-            name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
-            type: token
-          authorizer:
-            name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
-            type: token
-          authorizer:
-            name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
-            type: token
-          authorizer:
-            name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
-            type: token
   getCurso:
     handler: functions/getCurso.getCurso
     events:
