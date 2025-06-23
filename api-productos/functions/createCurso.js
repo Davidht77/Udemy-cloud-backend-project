@@ -6,14 +6,20 @@ const TABLE_NAME = 'prod_cursos_curses';
 
 module.exports.createCurso = async (event) => {
   try {
-    const { tenant_id, curso_id, nombre, descripcion, duracion, imagen_url } = JSON.parse(event.body);
+  console.log('Full event:', JSON.stringify(event, null, 2));
+  console.log('Event body:', event.body);
 
-    if (!curso_id || !nombre || !tenant_id || !imagen_url) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ message: 'Missing curso_id, nombre, or tenant_id' }),
-      };
-    }
+  const { tenant_id, curso_id, nombre, descripcion, duracion, imagen_url } = JSON.parse(event.body);
+
+  // Validar que los campos requeridos existan
+  if (!tenant_id || !curso_id || !nombre || !descripcion || !duracion || !imagen_url) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: 'Faltan campos requeridos. Asegúrate de proporcionar tenant_id, curso_id, nombre, descripcion, duracion e imagen_url.',
+      }),
+    };
+  }
 
     const params = {
       TableName: TABLE_NAME,
