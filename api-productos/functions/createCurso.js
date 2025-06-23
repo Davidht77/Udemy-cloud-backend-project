@@ -4,17 +4,11 @@ const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = 'prod_cursos_curses';
 
-const getTenantId = (event) => {
-  return event.headers ? event.headers['tenant-id'] : 'default_tenant';
-};
-
 module.exports.createCurso = async (event) => {
   try {
-    const tenantId = getTenantId(event);
-    const body = JSON.parse(event.body);
-    const { curso_id, nombre, descripcion, duracion } = body;
+    const { tenant_id, curso_id, nombre, descripcion, duracion, imagen_url } = JSON.parse(event.body);
 
-    if (!curso_id || !nombre || !tenantId) {
+    if (!curso_id || !nombre || !tenant_id || !imagen_url) {
       return {
         statusCode: 400,
         body: JSON.stringify({ message: 'Missing curso_id, nombre, or tenant_id' }),
@@ -24,11 +18,12 @@ module.exports.createCurso = async (event) => {
     const params = {
       TableName: TABLE_NAME,
       Item: {
-        tenant_id: tenantId,
+        tenant_id: tenant_id,
         curso_id: curso_id,
         nombre: nombre,
         descripcion: descripcion,
         duracion: duracion,
+        imagen_url: imagen_url,
       },
     };
 
