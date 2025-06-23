@@ -33,13 +33,19 @@ module.exports.createCurso = async (event) => {
     await dynamodb.put(params).promise();
 
     return {
-      statusCode: 201,
-      body: JSON.stringify({ message: 'Curso creado exitosamente', curso: params.Item }),
+      statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message: 'Curso creado exitosamente!' }),
     };
   } catch (error) {
     console.error('Error creating curso:', error);
     return {
       statusCode: 500,
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ message: 'Could not create curso', error: error.message }),
     };
   }
