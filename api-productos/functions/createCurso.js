@@ -6,10 +6,7 @@ const TABLE_NAME = 'prod_cursos_curses';
 
 module.exports.createCurso = async (event) => {
   try {
-  console.log('Full event:', JSON.stringify(event, null, 2));
-  console.log('Event body:', event.body);
-
-  const { tenant_id, curso_id, nombre, descripcion, duracion, imagen_url } = JSON.parse(event.body);
+  const { tenant_id, curso_id, nombre, descripcion, duracion, imagen_url } = event.body;
 
   // Validar que los campos requeridos existan
   if (!tenant_id || !curso_id || !nombre || !descripcion || !duracion || !imagen_url) {
