@@ -12,8 +12,33 @@ module.exports.createCurso = async (event) => {
   if (!tenant_id || !curso_id || !nombre || !descripcion || !duracion || !imagen_url) {
     return {
       statusCode: 400,
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         message: 'Faltan campos requeridos. Asegúrate de proporcionar tenant_id, curso_id, nombre, descripcion, duracion e imagen_url.',
+      }),
+    };
+  }
+
+  // Validar que el tenant_id exista en la tabla de accessTokens
+  const userTableParams = {
+    TableName: 'prod_user_curses',
+    Key: {
+      tenant_id: tenant_id,
+    },
+  };
+
+  const userResult = await dynamoDb.get(userTableParams).promise();
+
+  if (!userResult.Item) {
+    return {
+      statusCode: 404,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: 'Tenant ID no encontrado. No se puede crear un curso para un tenant_id inexistente.',
       }),
     };
   }
