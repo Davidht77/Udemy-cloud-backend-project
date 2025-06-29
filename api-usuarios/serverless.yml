@@ -16,7 +16,7 @@ functions:
     handler: functions/CrearUsuario.lambda_handler
     events:
       - http:
-          path: /usuarios/crear
+          path: /usuarios/register
           method: post
           cors: true
           integration: lambda

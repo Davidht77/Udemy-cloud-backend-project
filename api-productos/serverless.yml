@@ -12,12 +12,14 @@ provider:
     statements:
       - Effect: Allow
         Action:
-          - dynamodb:GetItem
           - dynamodb:PutItem
+          - dynamodb:GetItem
           - dynamodb:UpdateItem
           - dynamodb:DeleteItem
+          - dynamodb:Query
           - dynamodb:Scan
-        Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/prod_cursos_curses"
+        - Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/prod_cursos_curses"
+         - Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/prod_user_curses"
   stage: dev
   region: us-east-1 #
 
