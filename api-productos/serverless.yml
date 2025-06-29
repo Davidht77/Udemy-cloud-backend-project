@@ -46,6 +46,12 @@ functions:
           method: get
           cors: true
           integration: lambda
+          authorizer:
+            name: validarToken
+            arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
+            resultTtlInSeconds: 0
+            identitySource: method.request.header.Authorization
+            type: token
   updateCurso:
     handler: functions/updateCurso.updateCurso
     events:
@@ -54,6 +60,12 @@ functions:
           method: put
           cors: true
           integration: lambda
+          authorizer:
+            name: validarToken
+            arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
+            resultTtlInSeconds: 0
+            identitySource: method.request.header.Authorization
+            type: token
   deleteCurso:
     handler: functions/deleteCurso.deleteCurso
     events:
@@ -62,6 +74,12 @@ functions:
           method: delete
           cors: true
           integration: lambda
+          authorizer:
+            name: validarToken
+            arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
+            resultTtlInSeconds: 0
+            identitySource: method.request.header.Authorization
+            type: token
   listCursos:
     handler: functions/listCursos.listCursos
     events:
@@ -70,6 +88,9 @@ functions:
           method: get
           cors: true
           integration: lambda
-
-# plugins:
-#   - serverless-offline # Descomenta si quieres usar serverless-offline
+          authorizer:
+            name: validarToken
+            arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
+            resultTtlInSeconds: 0
+            identitySource: method.request.header.Authorization
+            type: token

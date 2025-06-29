@@ -40,3 +40,9 @@ functions:
           method: get
           cors: true
           integration: lambda
+          authorizer:
+            name: validarToken
+            arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
+            resultTtlInSeconds: 0
+            identitySource: method.request.header.Authorization
+            type: token
