@@ -18,8 +18,9 @@ provider:
           - dynamodb:DeleteItem
           - dynamodb:Query
           - dynamodb:Scan
-        - Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/prod_cursos_curses"
-        - Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/prod_user_curses"
+        Resource:
+          - "arn:aws:dynamodb:${self:provider.region}:*:table/prod_cursos_curses"
+          - "arn:aws:dynamodb:${self:provider.region}:*:table/prod_user_curses"
   stage: dev
   region: us-east-1 #
 
