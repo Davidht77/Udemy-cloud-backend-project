@@ -5,7 +5,7 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = 'prod_cursos_curses';
 
 const getTenantId = (event) => {
-  return event.headers ? event.headers['tenant-id'] : 'default_tenant';
+  return event.queryStringParameters ? event.queryStringParameters.tenant_id : null;
 };
 
 module.exports.listCursos = async (event) => {

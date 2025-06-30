@@ -5,7 +5,7 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = 'prod_compras_curses';
 
 const getTenantId = (event) => {
-  return event.headers ? event.headers['tenant-id'] : 'default_tenant';
+  return event.queryStringParameters ? event.queryStringParameters.tenant_id : null;
 };
 
 module.exports.listCompras = async (event) => {
@@ -19,6 +19,8 @@ module.exports.listCompras = async (event) => {
         body: JSON.stringify({ message: 'Missing tenant_id' }),
       };
     }
+
+
 
     const params = {
       TableName: TABLE_NAME,
