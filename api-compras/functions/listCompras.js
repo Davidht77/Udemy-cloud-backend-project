@@ -11,7 +11,7 @@ const getTenantId = (event) => {
 module.exports.listCompras = async (event) => {
   try {
     const tenantId = getTenantId(event);
-    const { user_id } = event.queryStringParameters || {};
+    const { user_id, limit, lastEvaluatedKey } = event.queryStringParameters || {};
 
     if (!tenantId) {
       return {
@@ -33,6 +33,14 @@ module.exports.listCompras = async (event) => {
       params.ExpressionAttributeValues[':user_id'] = user_id;
     }
 
+    if (limit) {
+      params.Limit = parseInt(limit);
+    }
+
+    if (lastEvaluatedKey) {
+      params.ExclusiveStartKey = JSON.parse(decodeURIComponent(lastEvaluatedKey));
+    }
+
     const result = await dynamodb.query(params).promise();
 
     return {
@@ -40,6 +48,7 @@ module.exports.listCompras = async (event) => {
       body: JSON.stringify({
         message: 'Lista de compras obtenida',
         compras: result.Items,
+        lastEvaluatedKey: result.LastEvaluatedKey ? encodeURIComponent(JSON.stringify(result.LastEvaluatedKey)) : undefined,
       }),
     };
   } catch (error) {
