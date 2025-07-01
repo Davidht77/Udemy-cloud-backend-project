@@ -16,7 +16,10 @@ module.exports.listCursos = async (event) => {
     if (!tenantId) {
       return {
         statusCode: 400,
-        body: JSON.stringify({ message: 'Missing tenant_id' }),
+        body: JSON.stringify({
+          message: 'Missing tenant_id',
+          queryStringParameters: event.queryStringParameters || 'not found'
+        }),
       };
     }
 
