@@ -54,6 +54,7 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'body': {
             'token': token,
-            'user_id': user_id
+            'user_id': user_id,
+            'tenat_id': tenant_id
         }
     }
