@@ -30,7 +30,7 @@ functions:
     events:
       - http:
           path: /cursos
-          method: post
+          method: get
           cors: true
           integration: lambda
           request:
