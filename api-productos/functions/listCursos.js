@@ -30,7 +30,7 @@ module.exports.listCursos = async (event) => {
     };
 
     if (lastEvaluatedKey) {
-      params.ExclusiveStartKey = JSON.parse(decodeURIComponent(lastEvaluatedKey));
+      params.ExclusiveStartKey = JSON.parse(Buffer.from(lastEvaluatedKey, 'base64').toString('ascii'));
     }
 
     const result = await dynamodb.query(params).promise();
@@ -40,7 +40,7 @@ module.exports.listCursos = async (event) => {
       body: JSON.stringify({
         message: 'Lista de cursos obtenida',
         cursos: result.Items,
-        lastEvaluatedKey: result.LastEvaluatedKey ? encodeURIComponent(JSON.stringify(result.LastEvaluatedKey)) : undefined,
+        lastEvaluatedKey: result.LastEvaluatedKey ? Buffer.from(JSON.stringify(result.LastEvaluatedKey)).toString('base64') : undefined,
       }),
     };
   } catch (error) {

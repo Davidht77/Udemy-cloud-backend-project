@@ -20,7 +20,12 @@ module.exports.listCompras = async (event) => {
       };
     }
 
-
+    if(!user_id){
+      return {
+        statusCode: 400,
+        body: JSON.stringify({ message: 'Missing user_id' }),
+      };
+    }
 
     const params = {
       TableName: TABLE_NAME,
@@ -40,7 +45,7 @@ module.exports.listCompras = async (event) => {
     }
 
     if (lastEvaluatedKey) {
-      params.ExclusiveStartKey = JSON.parse(decodeURIComponent(lastEvaluatedKey));
+      params.ExclusiveStartKey = JSON.parse(Buffer.from(lastEvaluatedKey, 'base64').toString('ascii'));
     }
 
     const result = await dynamodb.query(params).promise();
@@ -50,7 +55,7 @@ module.exports.listCompras = async (event) => {
       body: JSON.stringify({
         message: 'Lista de compras obtenida',
         compras: result.Items,
-        lastEvaluatedKey: result.LastEvaluatedKey ? encodeURIComponent(JSON.stringify(result.LastEvaluatedKey)) : undefined,
+        lastEvaluatedKey: result.LastEvaluatedKey ? Buffer.from(JSON.stringify(result.LastEvaluatedKey)).toString('base64') : undefined,
       }),
     };
   } catch (error) {
