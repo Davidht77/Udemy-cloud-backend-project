@@ -22,24 +22,25 @@ module.exports.createCurso = async (event) => {
     };
   }
 
-  // Validar que el tenant_id exista en la tabla de accessTokens
-  const userTableParams = {
+  // Validar que el tenant_id existe en la tabla de usuarios
+  const userParams = {
     TableName: 'prod_user_curses',
-    Key: {
-      tenant_id: tenant_id,
+    KeyConditionExpression: 'tenant_id = :tenant_id',
+    ExpressionAttributeValues: {
+      ':tenant_id': tenant_id,
     },
   };
 
-  const userResult = await dynamodb.get(userTableParams).promise();
+  const userResult = await dynamodb.query(userParams).promise();
 
-  if (!userResult.Item) {
+  if (userResult.Items.length === 0) {
     return {
       statusCode: 404,
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        message: 'Tenant ID no encontrado. No se puede crear un curso para un tenant_id inexistente.',
+        message: 'El tenant_id proporcionado no existe.',
       }),
     };
   }
