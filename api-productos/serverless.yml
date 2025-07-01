@@ -32,7 +32,6 @@ functions:
           path: /cursos
           method: post
           cors: true
-          integration: lambda
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
@@ -48,7 +47,6 @@ functions:
           path: /cursos/{id}
           method: get
           cors: true
-          integration: lambda
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
@@ -62,7 +60,6 @@ functions:
           path: /cursos/{id}
           method: put
           cors: true
-          integration: lambda
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
@@ -76,7 +73,6 @@ functions:
           path: /cursos/{id}
           method: delete
           cors: true
-          integration: lambda
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
@@ -90,7 +86,6 @@ functions:
           path: /cursos
           method: get
           cors: true
-          integration: lambda
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken

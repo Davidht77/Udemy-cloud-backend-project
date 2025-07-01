@@ -25,7 +25,6 @@ functions:
           path: /compras
           method: post
           cors: true
-          integration: lambda
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
@@ -39,7 +38,6 @@ functions:
           path: /compras
           method: get
           cors: true
-          integration: lambda
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
