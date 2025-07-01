@@ -30,7 +30,7 @@ module.exports.createCurso = async (event) => {
     },
   };
 
-  const userResult = await dynamoDb.get(userTableParams).promise();
+  const userResult = await dynamodb.get(userTableParams).promise();
 
   if (!userResult.Item) {
     return {
