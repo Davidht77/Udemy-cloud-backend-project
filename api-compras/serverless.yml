@@ -26,13 +26,6 @@ functions:
           method: post
           cors: true
           integration: lambda
-          request:
-            parameters:
-              querystrings:
-                tenant_id: true
-                user_id: false
-                limit: false
-                lastEvaluatedKey: false
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
@@ -47,6 +40,13 @@ functions:
           method: get
           cors: true
           integration: lambda
+          request:
+            parameters:
+              querystrings:
+                tenant_id: true
+                user_id: false
+                limit: false
+                lastEvaluatedKey: false
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken

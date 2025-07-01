@@ -30,15 +30,9 @@ functions:
     events:
       - http:
           path: /cursos
-          method: get
+          method: post
           cors: true
           integration: lambda
-          request:
-            parameters:
-              querystrings:
-                tenant_id: true
-                limit: false
-                lastEvaluatedKey: false
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
@@ -97,6 +91,12 @@ functions:
           method: get
           cors: true
           integration: lambda
+          request:
+            parameters:
+              querystrings:
+                tenant_id: true
+                limit: false
+                lastEvaluatedKey: false
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:385255784123:function:api-usuarios-dev-validarToken
