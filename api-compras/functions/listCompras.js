@@ -16,10 +16,7 @@ module.exports.listCompras = async (event) => {
     if (!tenantId) {
       return {
         statusCode: 400,
-        body: JSON.stringify({
-          message: 'Missing tenant_id',
-          queryStringParameters: event.queryStringParameters || 'not found'
-        }),
+        body: JSON.stringify({ message: 'Missing tenant_id' }),
       };
     }
 
