@@ -52,8 +52,8 @@ def lambda_handler(event, context):
     # Salida (json)
     return {
         'statusCode': 200,
-        'body': json.dumps({
+        'body': {
             'token': token,
             'user_id': user_id
-        })
+        }
     }
