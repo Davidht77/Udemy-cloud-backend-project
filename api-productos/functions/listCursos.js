@@ -22,7 +22,7 @@ module.exports.listCursos = async (event) => {
 
     const params = {
       TableName: TABLE_NAME,
-      FilterExpression: 'tenant_id = :tenantId',
+      KeyConditionExpression: 'tenant_id = :tenantId',
       ExpressionAttributeValues: {
         ':tenantId': tenantId,
       },
@@ -33,7 +33,7 @@ module.exports.listCursos = async (event) => {
       params.ExclusiveStartKey = JSON.parse(decodeURIComponent(lastEvaluatedKey));
     }
 
-    const result = await dynamodb.scan(params).promise();
+    const result = await dynamodb.query(params).promise();
 
     return {
       statusCode: 200,
