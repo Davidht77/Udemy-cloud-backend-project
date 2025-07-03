@@ -7,7 +7,7 @@ provider:
   runtime: nodejs18.x # o la versión de Node.js que prefieras
   timeout: 30  
   iam:
-    role: arn:aws:iam::441457859071:role/LabRole
+    role: arn:aws:iam::385255784123:role/LabRole
     # Añadir permisos para DynamoDB
     statements:
       - Effect: Allow
@@ -39,6 +39,20 @@ functions:
             identitySource: method.request.header.Authorization
             type: token
 
+  searchCursosByName:
+    handler: functions/searchCursosByName.searchCursosByName
+    events:
+      - http:
+          path: /cursos/search
+          method: get
+          cors: true
+          authorizer:
+            name: validarToken
+            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
+            resultTtlInSeconds: 0
+            identitySource: method.request.header.Authorization
+            type: token
+
 
   getCurso:
     handler: functions/getCurso.getCurso
@@ -53,6 +67,7 @@ functions:
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
+
   updateCurso:
     handler: functions/updateCurso.updateCurso
     events:
@@ -66,6 +81,7 @@ functions:
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
+
   deleteCurso:
     handler: functions/deleteCurso.deleteCurso
     events:
@@ -79,6 +95,7 @@ functions:
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
+            
   listCursos:
     handler: functions/listCursos.listCursos
     events:

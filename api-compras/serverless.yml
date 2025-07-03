@@ -7,7 +7,7 @@ provider:
   runtime: nodejs18.x
   timeout: 30
   iam:
-    role: arn:aws:iam::441457859071:role/LabRole
+    role: arn:aws:iam::385255784123:role/LabRole
     statements:
       - Effect: Allow
         Action:
