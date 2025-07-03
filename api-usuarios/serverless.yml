@@ -7,7 +7,7 @@ provider:
   runtime: python3.13
   timeout: 30  
   iam:
-    role: arn:aws:iam::385255784123:role/LabRole
+    role: ${env:AWS_ROLE_ARN}
   stage: dev
   region: us-east-1
 

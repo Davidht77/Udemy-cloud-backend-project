@@ -39,6 +39,8 @@ jobs:
           aws-region: us-east-1 # La región de AWS donde desplegarás todos tus servicios
 
       - name: Deploy all Serverless services
+        env:
+          AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
         # Aquí definimos un array de los directorios de tus servicios
         # Asegúrate de que estos nombres coincidan con tus carpetas reales
         run: |
