@@ -7,7 +7,7 @@ provider:
   runtime: nodejs18.x # o la versión de Node.js que prefieras
   timeout: 30  
   iam:
-    role: arn:aws:iam::385255784123:role/LabRole
+    role: arn:aws:iam::367311722984:role/LabRole
     # Añadir permisos para DynamoDB
     statements:
       - Effect: Allow

@@ -7,7 +7,7 @@ provider:
   runtime: python3.13
   timeout: 30  
   iam:
-    role: arn:aws:iam::385255784123:role/LabRole
+    role: arn:aws:iam::367311722984:role/LabRole
   stage: dev
   region: us-east-1
 
