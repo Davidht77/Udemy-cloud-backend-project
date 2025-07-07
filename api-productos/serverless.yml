@@ -7,7 +7,7 @@ provider:
   runtime: nodejs18.x # o la versión de Node.js que prefieras
   timeout: 30  
   iam:
-    role: arn:aws:iam::367311722984:role/LabRole
+    role: arn:aws:iam::385255784123:role/LabRole
     # Añadir permisos para DynamoDB
     statements:
       - Effect: Allow
@@ -24,9 +24,33 @@ provider:
   stage: dev
   region: us-east-1 #
 
+custom:
+  tablePrefix: ${opt:stage, self:provider.stage}
+
+resources:
+  Resources:
+    CursosTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.tablePrefix}_cursos_curses
+        AttributeDefinitions:
+          - AttributeName: tenant_id
+            AttributeType: S
+          - AttributeName: curso_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: tenant_id
+            KeyType: HASH
+          - AttributeName: curso_id
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+
 functions:
   createCurso:
     handler: functions/createCurso.createCurso
+    environment:
+      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos_curses
+      USERS_TABLE_NAME: ${self:custom.tablePrefix}_user_curses
     events:
       - http:
           path: /cursos
@@ -41,6 +65,8 @@ functions:
 
   searchCursosByName:
     handler: functions/searchCursosByName.searchCursosByName
+    environment:
+      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos_curses
     events:
       - http:
           path: /cursos/search
@@ -54,8 +80,28 @@ functions:
             type: token
 
 
+
+
+  searchCursosByCategory:
+    handler: functions/searchCursosByCategory.searchCursosByCategory
+    environment:
+      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos_curses
+    events:
+      - http:
+          path: /cursos/category
+          method: get
+          cors: true
+          authorizer:
+            name: validarToken
+            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
+            resultTtlInSeconds: 0
+            identitySource: method.request.header.Authorization
+            type: token
+
   getCurso:
     handler: functions/getCurso.getCurso
+    environment:
+      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos_curses
     events:
       - http:
           path: /cursos/{id}
@@ -70,6 +116,8 @@ functions:
 
   updateCurso:
     handler: functions/updateCurso.updateCurso
+    environment:
+      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos_curses
     events:
       - http:
           path: /cursos/{id}
@@ -84,6 +132,8 @@ functions:
 
   deleteCurso:
     handler: functions/deleteCurso.deleteCurso
+    environment:
+      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos_curses
     events:
       - http:
           path: /cursos/{id}
@@ -98,6 +148,8 @@ functions:
             
   listCursos:
     handler: functions/listCursos.listCursos
+    environment:
+      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos_curses
     events:
       - http:
           path: /cursos

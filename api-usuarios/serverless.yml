@@ -7,13 +7,48 @@ provider:
   runtime: python3.13
   timeout: 30  
   iam:
-    role: arn:aws:iam::367311722984:role/LabRole
+    role: arn:aws:iam::385255784123:role/LabRole
   stage: dev
   region: us-east-1
+
+custom:
+  tablePrefix: ${opt:stage, self:provider.stage}
+
+resources:
+  Resources:
+    PersonasTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.tablePrefix}_user_curses
+        AttributeDefinitions:
+          - AttributeName: tenant_id
+            AttributeType: S
+          - AttributeName: user_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: tenant_id
+            KeyType: HASH
+          - AttributeName: user_id
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+
+    AccessTokensTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.tablePrefix}_accessTokens_curses
+        AttributeDefinitions:
+          - AttributeName: token
+            AttributeType: S
+        KeySchema:
+          - AttributeName: token
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
 
 functions:
   createUsuario:
     handler: functions/CrearUsuario.lambda_handler
+    environment:
+      TABLE_NAME: ${self:custom.tablePrefix}_user_curses
     events:
       - http:
           path: /usuarios/register
@@ -22,6 +57,9 @@ functions:
           integration: lambda
   loginUsuario:
     handler: functions/LoginUsuario.lambda_handler
+    environment:
+      USER_TABLE_NAME: ${self:custom.tablePrefix}_user_curses
+      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens_curses
     events:
       - http:
           path: /usuarios/login
@@ -30,6 +68,8 @@ functions:
           integration: lambda
   validarToken:
     handler: functions/ValidarTokenAcceso.lambda_handler
+    environment:
+      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens_curses
     events:
       - http:
           path: /usuarios/validarToken

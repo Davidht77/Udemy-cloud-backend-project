@@ -1,6 +1,7 @@
 import boto3
 import hashlib
 import json # Importa la librería json
+import os
 
 # Hashear contraseña
 def hash_password(password):
@@ -36,7 +37,8 @@ def lambda_handler(event, context):
             hashed_password = hash_password(password)
             # Conectar DynamoDB
             dynamodb = boto3.resource('dynamodb')
-            t_usuarios = dynamodb.Table('prod_user_curses')
+            table_name = os.environ.get('TABLE_NAME')
+            t_usuarios = dynamodb.Table(table_name)
 
             item = {
                 'user_id': user_id,

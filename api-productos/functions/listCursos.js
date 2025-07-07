@@ -2,7 +2,7 @@
 
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const TABLE_NAME = 'prod_cursos_curses';
+const TABLE_NAME = process.env.CURSOS_TABLE_NAME;
 
 const getTenantId = (event) => {
   return event.queryStringParameters ? event.queryStringParameters.tenant_id : null;

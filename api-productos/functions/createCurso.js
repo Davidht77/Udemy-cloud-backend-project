@@ -2,29 +2,29 @@
 
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const TABLE_NAME = 'prod_cursos_curses';
+const TABLE_NAME = process.env.CURSOS_TABLE_NAME;
 
 module.exports.createCurso = async (event) => {
   try {
   const body = JSON.parse(event.body);
-  const { tenant_id, curso_id, nombre, descripcion, duracion, imagen_url } = body;
+  const { tenant_id, curso_id, nombre, descripcion, duracion, imagen_url, categories } = body;
 
   // Validar que los campos requeridos existan
-  if (!tenant_id || !curso_id || !nombre || !descripcion || !duracion || !imagen_url) {
+  if (!tenant_id || !curso_id || !nombre || !descripcion || !duracion || !imagen_url || !categories || !Array.isArray(categories) || categories.length === 0) {
     return {
       statusCode: 400,
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        message: 'Faltan campos requeridos. Asegúrate de proporcionar tenant_id, curso_id, nombre, descripcion, duracion e imagen_url.',
+        message: 'Faltan campos requeridos. Asegúrate de proporcionar tenant_id, curso_id, nombre, descripcion, duracion, imagen_url y categories (como un array no vacío).',
       }),
     };
   }
 
   // Validar que el tenant_id existe en la tabla de usuarios
   const userParams = {
-    TableName: 'prod_user_curses',
+    TableName: process.env.USERS_TABLE_NAME,
     KeyConditionExpression: 'tenant_id = :tenant_id',
     ExpressionAttributeValues: {
       ':tenant_id': tenant_id,
@@ -54,6 +54,7 @@ module.exports.createCurso = async (event) => {
         descripcion: descripcion,
         duracion: duracion,
         imagen_url: imagen_url,
+        categories: categories,
       },
     };
 

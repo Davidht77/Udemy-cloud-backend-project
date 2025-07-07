@@ -1,4 +1,5 @@
 import boto3
+import os
 from datetime import datetime
 
 def lambda_handler(event, context):
@@ -6,7 +7,8 @@ def lambda_handler(event, context):
     token = event['authorizationToken']
     # Proceso
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('prod_accessTokens_curses')
+    table_name = os.environ.get('ACCESS_TOKEN_TABLE_NAME')
+    table = dynamodb.Table(table_name)
     response = table.get_item(
         Key={
             'token': token

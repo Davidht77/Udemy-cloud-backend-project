@@ -7,7 +7,7 @@ provider:
   runtime: nodejs18.x
   timeout: 30
   iam:
-    role: arn:aws:iam::367311722984:role/LabRole
+    role: arn:aws:iam::385255784123:role/LabRole
     statements:
       - Effect: Allow
         Action:
@@ -17,11 +17,36 @@ provider:
   stage: dev
   region: us-east-1
 
+custom:
+  tablePrefix: ${opt:stage, self:provider.stage}
+
+resources:
+  Resources:
+    ProdComprasTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.tablePrefix}_compras_curses
+        AttributeDefinitions:
+          - AttributeName: tenant_id
+            AttributeType: S
+          - AttributeName: order_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: tenant_id
+            KeyType: HASH
+          - AttributeName: order_id
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+
 functions:
   createCompra:
     handler: functions/createCompra.createCompra
+    environment:
+      COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras_curses
     events:
       - http:
+              environment:
+                COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras_curses
           path: /compras
           method: post
           cors: true

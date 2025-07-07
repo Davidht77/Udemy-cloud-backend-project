@@ -3,6 +3,7 @@ import hashlib
 import uuid # Genera valores únicos
 from datetime import datetime, timedelta
 import json
+import os
 
 # Hashear contraseña
 def hash_password(password):
@@ -19,7 +20,8 @@ def lambda_handler(event, context):
     hashed_password = hash_password(password)
     # Proceso
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('prod_user_curses')
+    user_table_name = os.environ.get('USER_TABLE_NAME')
+    table = dynamodb.Table(user_table_name)
     response = table.get_item(
         Key={
             'tenant_id': tenant_id,  # Include tenant_id in the key
@@ -41,7 +43,8 @@ def lambda_handler(event, context):
                 'token': token,
                 'expires': fecha_hora_exp.strftime('%Y-%m-%d %H:%M:%S')
             }
-            table = dynamodb.Table('prod_accessTokens_curses')
+            access_token_table_name = os.environ.get('ACCESS_TOKEN_TABLE_NAME')
+            table = dynamodb.Table(access_token_table_name)
             dynamodbResponse = table.put_item(Item = registro)
         else:
             return {
