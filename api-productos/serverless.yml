@@ -101,7 +101,7 @@ functions:
   getCurso:
     handler: functions/getCurso.getCurso
     environment:
-      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos_curses
+      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
     events:
       - http:
           path: /cursos/{id}
@@ -117,7 +117,7 @@ functions:
   updateCurso:
     handler: functions/updateCurso.updateCurso
     environment:
-      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos_curses
+      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
     events:
       - http:
           path: /cursos/{id}
@@ -133,7 +133,7 @@ functions:
   deleteCurso:
     handler: functions/deleteCurso.deleteCurso
     environment:
-      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos_curses
+      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
     events:
       - http:
           path: /cursos/{id}
@@ -149,7 +149,7 @@ functions:
   listCursos:
     handler: functions/listCursos.listCursos
     environment:
-      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos_curses
+      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
     events:
       - http:
           path: /cursos
