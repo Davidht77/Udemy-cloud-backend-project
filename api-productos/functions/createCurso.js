@@ -7,17 +7,17 @@ const TABLE_NAME = process.env.CURSOS_TABLE_NAME;
 module.exports.createCurso = async (event) => {
   try {
   const body = JSON.parse(event.body);
-  const { tenant_id, curso_id, nombre, descripcion, duracion, imagen_url, categories } = body;
+  const { tenant_id, curso_id, nombre, descripcion, duracion, imagen_url, categories, precio } = body;
 
   // Validar que los campos requeridos existan
-  if (!tenant_id || !curso_id || !nombre || !descripcion || !duracion || !imagen_url || !categories || !Array.isArray(categories) || categories.length === 0) {
+  if (!tenant_id || !curso_id || !nombre || !descripcion || !duracion || !imagen_url || !categories || !Array.isArray(categories) || categories.length === 0 || precio === undefined) {
     return {
       statusCode: 400,
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        message: 'Faltan campos requeridos. Asegúrate de proporcionar tenant_id, curso_id, nombre, descripcion, duracion, imagen_url y categories (como un array no vacío).',
+        message: 'Faltan campos requeridos. Asegúrate de proporcionar tenant_id, curso_id, nombre, descripcion, duracion, imagen_url, categories (como un array no vacío) y precio.',
       }),
     };
   }
@@ -55,6 +55,7 @@ module.exports.createCurso = async (event) => {
         duracion: duracion,
         imagen_url: imagen_url,
         categories: categories,
+        precio: precio,
       },
     };
 
