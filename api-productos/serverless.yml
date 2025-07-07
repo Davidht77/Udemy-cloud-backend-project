@@ -19,8 +19,8 @@ provider:
           - dynamodb:Query
           - dynamodb:Scan
         Resource:
-          - "arn:aws:dynamodb:${self:provider.region}:*:table/prod_cursos_curses"
-          - "arn:aws:dynamodb:${self:provider.region}:*:table/prod_user_curses"
+          - "arn:aws:dynamodb:${self:provider.region}:*:table/prod_cursos"
+          - "arn:aws:dynamodb:${self:provider.region}:*:table/prod_user"
   stage: dev
   region: us-east-1 #
 
@@ -32,7 +32,7 @@ resources:
     CursosTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.tablePrefix}_cursos_curses
+        TableName: ${self:custom.tablePrefix}_cursos
         AttributeDefinitions:
           - AttributeName: tenant_id
             AttributeType: S
@@ -49,8 +49,8 @@ functions:
   createCurso:
     handler: functions/createCurso.createCurso
     environment:
-      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos_curses
-      USERS_TABLE_NAME: ${self:custom.tablePrefix}_user_curses
+      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
+      USERS_TABLE_NAME: ${self:custom.tablePrefix}_user
     events:
       - http:
           path: /cursos
@@ -66,7 +66,7 @@ functions:
   searchCursosByName:
     handler: functions/searchCursosByName.searchCursosByName
     environment:
-      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos_curses
+      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
     events:
       - http:
           path: /cursos/search
@@ -85,7 +85,7 @@ functions:
   searchCursosByCategory:
     handler: functions/searchCursosByCategory.searchCursosByCategory
     environment:
-      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos_curses
+      CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
     events:
       - http:
           path: /cursos/category

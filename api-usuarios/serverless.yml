@@ -19,7 +19,7 @@ resources:
     PersonasTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.tablePrefix}_user_curses
+        TableName: ${self:custom.tablePrefix}_user
         AttributeDefinitions:
           - AttributeName: tenant_id
             AttributeType: S
@@ -35,7 +35,7 @@ resources:
     AccessTokensTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.tablePrefix}_accessTokens_curses
+        TableName: ${self:custom.tablePrefix}_accessTokens
         AttributeDefinitions:
           - AttributeName: token
             AttributeType: S
@@ -48,7 +48,7 @@ functions:
   createUsuario:
     handler: functions/CrearUsuario.lambda_handler
     environment:
-      TABLE_NAME: ${self:custom.tablePrefix}_user_curses
+      TABLE_NAME: ${self:custom.tablePrefix}_user
     events:
       - http:
           path: /usuarios/register
@@ -58,8 +58,8 @@ functions:
   loginUsuario:
     handler: functions/LoginUsuario.lambda_handler
     environment:
-      USER_TABLE_NAME: ${self:custom.tablePrefix}_user_curses
-      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens_curses
+      USER_TABLE_NAME: ${self:custom.tablePrefix}_user
+      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens
     events:
       - http:
           path: /usuarios/login
@@ -69,7 +69,7 @@ functions:
   validarToken:
     handler: functions/ValidarTokenAcceso.lambda_handler
     environment:
-      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens_curses
+      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens
     events:
       - http:
           path: /usuarios/validarToken

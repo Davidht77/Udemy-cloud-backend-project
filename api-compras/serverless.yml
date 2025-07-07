@@ -13,7 +13,7 @@ provider:
         Action:
           - dynamodb:PutItem
           - dynamodb:Query
-        Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/prod_compras_curses"
+        Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/prod_compras"
   stage: dev
   region: us-east-1
 
@@ -25,7 +25,7 @@ resources:
     ProdComprasTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: ${self:custom.tablePrefix}_compras_curses
+        TableName: ${self:custom.tablePrefix}_compras
         AttributeDefinitions:
           - AttributeName: tenant_id
             AttributeType: S
@@ -42,14 +42,14 @@ functions:
   createCompra:
     handler: functions/createCompra.createCompra
     environment:
-      COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras_curses
+      COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras
     events:
       - http:
           path: /compras
           method: post
           cors: true
           environment:
-            COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras_curses
+            COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
