@@ -45,11 +45,11 @@ functions:
       COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras_curses
     events:
       - http:
-              environment:
-                COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras_curses
           path: /compras
           method: post
           cors: true
+          environment:
+            COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras_curses
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
