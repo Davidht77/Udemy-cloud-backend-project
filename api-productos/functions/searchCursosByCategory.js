@@ -4,12 +4,25 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 const CURSOS_TABLE_NAME = process.env.CURSOS_TABLE_NAME;
 
 const getTenantId = (event) => {
-    return event.requestContext.authorizer.claims['custom:tenant_id'];
+    if (event.requestContext && event.requestContext.authorizer && event.requestContext.authorizer.claims) {
+        return event.requestContext.authorizer.claims['custom:tenant_id'];
+    } else if (event.queryStringParameters && event.queryStringParameters.tenant_id) {
+        return event.queryStringParameters.tenant_id;
+    } else {
+        return null;
+    }
 };
 
 module.exports.searchCursosByCategory = async (event) => {
     const tenant_id = getTenantId(event);
-    const category = event.queryStringParameters.category;
+    const category = event.queryStringParameters ? event.queryStringParameters.category : null;
+
+    if (!tenant_id) {
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ message: 'Missing tenant_id' }),
+        };
+    }
 
     if (!category) {
         return {
