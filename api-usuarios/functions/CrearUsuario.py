@@ -58,12 +58,22 @@ def lambda_handler(event, context):
             # Retornar un código de estado HTTP 200 (OK) y un mensaje de éxito
             return {
                 'statusCode': 200,
-                'response': response
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': True
+                },
+                'body': json.dumps({'message': 'Usuario creado exitosamente', 'response': response})
             }
         else:
             return {
                 'statusCode': 400,
-                'response': {'error': 'Invalid request body: missing user_id, password or tenant_id'}
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': True
+                },
+                'body': json.dumps({'error': 'Invalid request body: missing user_id, password or tenant_id'})
             }
 
     except Exception as e:
@@ -71,5 +81,10 @@ def lambda_handler(event, context):
         print("Exception:", str(e))
         return {
             'statusCode': 500,
-            'response': {'error': str(e)}
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': True
+            },
+            'body': json.dumps({'error': str(e)})
         }

@@ -16,6 +16,11 @@ module.exports.listCompras = async (event) => {
     if (!tenantId) {
       return {
         statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
         body: JSON.stringify({ message: 'Missing tenant_id' }),
       };
     }
@@ -23,6 +28,11 @@ module.exports.listCompras = async (event) => {
     if(!user_id){
       return {
         statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
         body: JSON.stringify({ message: 'Missing user_id' }),
       };
     }
@@ -52,6 +62,11 @@ module.exports.listCompras = async (event) => {
 
     return {
       statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
       body: JSON.stringify({
         message: 'Lista de compras obtenida',
         compras: result.Items,
@@ -62,6 +77,11 @@ module.exports.listCompras = async (event) => {
     console.error('Error listing compras:', error);
     return {
       statusCode: 500,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
       body: JSON.stringify({ message: 'Could not list compras', error: error.message }),
     };
   }

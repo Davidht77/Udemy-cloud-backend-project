@@ -22,6 +22,11 @@ module.exports.createCompra = async (event) => {
     if (!user_id || !curso_id || isNaN(quantity) || isNaN(price) || !tenantId) {
       return {
         statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
         body: JSON.stringify({ message: 'Missing required fields or invalid number format for quantity/price' }),
       };
     }
@@ -43,12 +48,22 @@ module.exports.createCompra = async (event) => {
 
     return {
       statusCode: 201,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
       body: JSON.stringify({ message: 'Compra creada exitosamente', compra: params.Item }),
     };
   } catch (error) {
     console.error('Error creating compra:', error);
     return {
       statusCode: 500,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
       body: JSON.stringify({ message: 'Could not create compra', error: error.message }),
     };
   }
