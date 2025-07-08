@@ -5,6 +5,11 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = process.env.CURSOS_TABLE_NAME;
 
 const getTenantId = (event) => {
+  // Try to get tenant_id from authorizer context first
+  if (event.requestContext && event.requestContext.authorizer && event.requestContext.authorizer.lambda && event.requestContext.authorizer.lambda.tenant_id) {
+    return event.requestContext.authorizer.lambda.tenant_id;
+  }
+  // Fallback to query string parameters for testing or direct access if needed
   return event.queryStringParameters ? event.queryStringParameters.tenant_id : null;
 };
 
@@ -16,6 +21,10 @@ module.exports.listCursos = async (event) => {
     if (!tenantId) {
       return {
         statusCode: 400,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true,
+        },
         body: JSON.stringify({ message: 'Missing tenant_id' }),
       };
     }
@@ -37,6 +46,10 @@ module.exports.listCursos = async (event) => {
 
     return {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
       body: JSON.stringify({
         message: 'Lista de cursos obtenida',
         cursos: result.Items,
@@ -47,6 +60,10 @@ module.exports.listCursos = async (event) => {
     console.error('Error listing cursos:', error);
     return {
       statusCode: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true,
+      },
       body: JSON.stringify({ message: 'Could not list cursos', error: error.message }),
     };
   }
