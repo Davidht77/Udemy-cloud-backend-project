@@ -32,12 +32,9 @@ def lambda_handler(event, context):
         return {
             'statusCode': 403,
             'headers': {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Credentials': True
+                'Content-Type': 'application/json'
             },
             'body': json.dumps({'error': 'Usuario no existe'}),
-            'isBase64Encoded': False
         }
     else:
         hashed_password_bd = response['Item']['password']
@@ -56,26 +53,20 @@ def lambda_handler(event, context):
             return {
                 'statusCode': 403,
                 'headers': {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Credentials': True
+                    'Content-Type': 'application/json'
                 },
                 'body': json.dumps({'error': 'Password incorrecto'}),
-                'isBase64Encoded': False
             }
     
     # Salida (json)
     return {
         'statusCode': 200,
         'headers': {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Credentials': True
+            'Content-Type': 'application/json'
         },
         'body': json.dumps({
             'token': token,
             'user_id': user_id,
             'tenant_id': tenant_id
         }),
-        'isBase64Encoded': False
     }

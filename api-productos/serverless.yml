@@ -55,7 +55,17 @@ functions:
       - http:
           path: /cursos
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Auth-Token
+            allowCredentials: true
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
@@ -71,7 +81,17 @@ functions:
       - http:
           path: /cursos/search
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Auth-Token
+            allowCredentials: true
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
@@ -90,7 +110,17 @@ functions:
       - http:
           path: /cursos/category
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Auth-Token
+            allowCredentials: true
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
@@ -106,7 +136,17 @@ functions:
       - http:
           path: /cursos/{id}
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Auth-Token
+            allowCredentials: true
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
@@ -122,7 +162,17 @@ functions:
       - http:
           path: /cursos/{id}
           method: put
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Auth-Token
+            allowCredentials: true
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
@@ -138,7 +188,17 @@ functions:
       - http:
           path: /cursos/{id}
           method: delete
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Auth-Token
+            allowCredentials: true
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
@@ -154,7 +214,17 @@ functions:
       - http:
           path: /cursos
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Auth-Token
+            allowCredentials: true
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken

@@ -53,7 +53,17 @@ functions:
       - http:
           path: /usuarios/register
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Auth-Token
+            allowCredentials: true
           integration: lambda
   loginUsuario:
     handler: functions/LoginUsuario.lambda_handler
@@ -64,7 +74,17 @@ functions:
       - http:
           path: /usuarios/login
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Auth-Token
+            allowCredentials: true
           integration: lambda
   validarToken:
     handler: functions/ValidarTokenAcceso.lambda_handler
@@ -74,6 +94,16 @@ functions:
       - http:
           path: /usuarios/validarToken
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Auth-Token
+            allowCredentials: true
           integration: lambda
 

@@ -47,7 +47,17 @@ functions:
       - http:
           path: /compras
           method: post
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Auth-Token
+            allowCredentials: true
           environment:
             COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras
           authorizer:
@@ -64,7 +74,17 @@ functions:
       - http:
           path: /compras
           method: get
-          cors: true
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - X-Auth-Token
+            allowCredentials: true
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
