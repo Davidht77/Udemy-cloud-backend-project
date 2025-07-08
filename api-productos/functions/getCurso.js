@@ -16,6 +16,11 @@ module.exports.getCurso = async (event) => {
     if (!id || !tenantId) {
       return {
         statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
         body: JSON.stringify({ message: 'Missing curso_id or tenant_id' }),
       };
     }
@@ -33,18 +38,33 @@ module.exports.getCurso = async (event) => {
     if (!result.Item) {
       return {
         statusCode: 404,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
         body: JSON.stringify({ message: 'Curso no encontrado' }),
       };
     }
 
     return {
       statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
       body: JSON.stringify({ message: `Curso ${id} obtenido`, curso: result.Item }),
     };
   } catch (error) {
     console.error('Error getting curso:', error);
     return {
       statusCode: 500,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
       body: JSON.stringify({ message: 'Could not get curso', error: error.message }),
     };
   }

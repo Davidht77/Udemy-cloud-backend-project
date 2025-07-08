@@ -16,6 +16,11 @@ module.exports.listCursos = async (event) => {
     if (!tenantId) {
       return {
         statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
         body: JSON.stringify({ message: 'Missing tenant_id' }),
       };
     }
@@ -37,6 +42,11 @@ module.exports.listCursos = async (event) => {
 
     return {
       statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
       body: JSON.stringify({
         message: 'Lista de cursos obtenida',
         cursos: result.Items,
@@ -47,6 +57,11 @@ module.exports.listCursos = async (event) => {
     console.error('Error listing cursos:', error);
     return {
       statusCode: 500,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
       body: JSON.stringify({ message: 'Could not list cursos', error: error.message }),
     };
   }

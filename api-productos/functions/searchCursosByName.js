@@ -16,6 +16,11 @@ module.exports.searchCursosByName = async (event) => {
     if (!tenantId) {
       return {
         statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
         body: JSON.stringify({ message: 'Missing tenant_id' }),
       };
     }
@@ -23,6 +28,11 @@ module.exports.searchCursosByName = async (event) => {
     if (!name) {
       return {
         statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
         body: JSON.stringify({ message: 'Missing name query parameter for search' }),
       };
     }
@@ -49,6 +59,11 @@ module.exports.searchCursosByName = async (event) => {
 
     return {
       statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
       body: JSON.stringify({
         message: `Cursos encontrados con el nombre que contiene '${name}'`,
         cursos: result.Items,
@@ -59,6 +74,11 @@ module.exports.searchCursosByName = async (event) => {
     console.error('Error searching cursos by name:', error);
     return {
       statusCode: 500,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
       body: JSON.stringify({ message: 'Could not search cursos by name', error: error.message }),
     };
   }

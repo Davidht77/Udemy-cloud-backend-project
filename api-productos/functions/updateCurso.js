@@ -18,6 +18,11 @@ module.exports.updateCurso = async (event) => {
     if (!id || !tenantId) {
       return {
         statusCode: 400,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': true
+        },
         body: JSON.stringify({ message: 'Missing curso_id or tenant_id' }),
       };
     }
@@ -41,12 +46,22 @@ module.exports.updateCurso = async (event) => {
 
     return {
       statusCode: 200,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
       body: JSON.stringify({ message: `Curso ${id} actualizado`, curso: result.Attributes }),
     };
   } catch (error) {
     console.error('Error updating curso:', error);
     return {
       statusCode: 500,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+      },
       body: JSON.stringify({ message: 'Could not update curso', error: error.message }),
     };
   }

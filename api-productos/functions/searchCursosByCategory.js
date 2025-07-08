@@ -20,6 +20,11 @@ module.exports.searchCursosByCategory = async (event) => {
     if (!tenant_id) {
         return {
             statusCode: 400,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true
+            },
             body: JSON.stringify({ message: 'Missing tenant_id' }),
         };
     }
@@ -27,6 +32,11 @@ module.exports.searchCursosByCategory = async (event) => {
     if (!category) {
         return {
             statusCode: 400,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true
+            },
             body: JSON.stringify({ message: 'Category is required' }),
         };
     }
@@ -44,12 +54,22 @@ module.exports.searchCursosByCategory = async (event) => {
         const result = await dynamodb.scan(params).promise();
         return {
             statusCode: 200,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true
+            },
             body: JSON.stringify(result.Items),
         };
     } catch (error) {
         console.error('Error searching courses by category:', error);
         return {
             statusCode: 500,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': true
+            },
             body: JSON.stringify({ message: 'Could not search courses by category', error: error.message }),
         };
     }
