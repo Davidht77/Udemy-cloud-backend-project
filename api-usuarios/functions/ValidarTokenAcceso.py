@@ -1,6 +1,7 @@
 import boto3
 import os
 from datetime import datetime
+import boto3
 
 def lambda_handler(event, context):
     # Entrada (json)
