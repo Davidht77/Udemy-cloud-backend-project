@@ -58,6 +58,8 @@ functions:
             type: token
   listCompras:
     handler: functions/listCompras.listCompras
+    environment:
+      COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras
     events:
       - http:
           path: /compras
