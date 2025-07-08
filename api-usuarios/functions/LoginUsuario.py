@@ -13,7 +13,7 @@ def hash_password(password):
 def lambda_handler(event, context):
     print("Received event:", event)
     # Entrada (json)
-    body = event['body'] # Access the body directly as it's already a dictionary
+    body = json.loads(event['body'])
     user_id = body['user_id']
     password = body['password']
     tenant_id = body['tenant_id']  # Add tenant_id to the input
