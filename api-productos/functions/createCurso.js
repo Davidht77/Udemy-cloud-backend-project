@@ -17,6 +17,8 @@ module.exports.createCurso = async (event) => {
       statusCode: 400,
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({
         message: 'Faltan campos requeridos. Asegúrate de proporcionar tenant_id, nombre, descripcion, duracion, imagen_url, categories (como un array no vacío), precio y rating.',
@@ -40,6 +42,8 @@ module.exports.createCurso = async (event) => {
       statusCode: 404,
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({
         message: 'El tenant_id proporcionado no existe.',
@@ -68,6 +72,8 @@ module.exports.createCurso = async (event) => {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({ message: 'Curso creado exitosamente!' }),
     };
@@ -77,6 +83,8 @@ module.exports.createCurso = async (event) => {
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({ message: 'Could not create curso', error: error.message }),
     };

@@ -63,7 +63,8 @@ def lambda_handler(event, context):
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Credentials': True
                 },
-                'body': json.dumps({'message': 'Usuario creado exitosamente', 'response': response})
+                'body': json.dumps({'message': 'Usuario creado exitosamente', 'response': response}),
+                'isBase64Encoded': False
             }
         else:
             return {
@@ -73,7 +74,8 @@ def lambda_handler(event, context):
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Credentials': True
                 },
-                'body': json.dumps({'error': 'Invalid request body: missing user_id, password or tenant_id'})
+                'body': json.dumps({'error': 'Invalid request body: missing user_id, password or tenant_id'}),
+                'isBase64Encoded': False
             }
 
     except Exception as e:
@@ -86,5 +88,6 @@ def lambda_handler(event, context):
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Credentials': True
             },
-            'body': json.dumps({'error': str(e)})
+            'body': json.dumps({'error': str(e)}),
+            'isBase64Encoded': False
         }

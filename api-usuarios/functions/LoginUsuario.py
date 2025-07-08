@@ -36,7 +36,8 @@ def lambda_handler(event, context):
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Credentials': True
             },
-            'body': json.dumps({'error': 'Usuario no existe'})
+            'body': json.dumps({'error': 'Usuario no existe'}),
+            'isBase64Encoded': False
         }
     else:
         hashed_password_bd = response['Item']['password']
@@ -59,7 +60,8 @@ def lambda_handler(event, context):
                     'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Credentials': True
                 },
-                'body': json.dumps({'error': 'Password incorrecto'})
+                'body': json.dumps({'error': 'Password incorrecto'}),
+                'isBase64Encoded': False
             }
     
     # Salida (json)
@@ -74,5 +76,6 @@ def lambda_handler(event, context):
             'token': token,
             'user_id': user_id,
             'tenant_id': tenant_id
-        })
+        }),
+        'isBase64Encoded': False
     }
