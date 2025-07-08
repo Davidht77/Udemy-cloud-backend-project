@@ -64,7 +64,7 @@ functions:
               - X-Amz-User-Agent
               - X-Auth-Token
             allowCredentials: true
-          integration: lambda
+
   loginUsuario:
     handler: functions/LoginUsuario.lambda_handler
     environment:
@@ -85,7 +85,7 @@ functions:
               - X-Amz-User-Agent
               - X-Auth-Token
             allowCredentials: true
-          integration: lambda
+
   validarToken:
     handler: functions/ValidarTokenAcceso.lambda_handler
     environment:
@@ -105,5 +105,4 @@ functions:
               - X-Amz-User-Agent
               - X-Auth-Token
             allowCredentials: true
-          integration: lambda
 
