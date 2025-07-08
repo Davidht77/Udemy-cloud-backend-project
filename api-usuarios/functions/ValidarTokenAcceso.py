@@ -58,8 +58,5 @@ def lambda_handler(event, context):
                     "Resource": event['methodArn']
                 }
             ]
-        },
-        "context": {
-            "tenant_id": response['Item']['tenant_id']
         }
     }
