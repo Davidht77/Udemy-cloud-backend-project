@@ -56,7 +56,7 @@ functions:
           path: /cursos
           method: post
           cors:
-            origin: '*'
+            origin: 'http://localhost:5173'
             headers:
               - Content-Type
               - X-Amz-Date
@@ -82,7 +82,7 @@ functions:
           path: /cursos/search
           method: get
           cors:
-            origin: '*'
+            origin: 'http://localhost:5173'
             headers:
               - Content-Type
               - X-Amz-Date
@@ -111,7 +111,7 @@ functions:
           path: /cursos/category
           method: get
           cors:
-            origin: '*'
+            origin: 'http://localhost:5173'
             headers:
               - Content-Type
               - X-Amz-Date
@@ -137,7 +137,7 @@ functions:
           path: /cursos/{id}
           method: get
           cors:
-            origin: '*'
+            origin: 'http://localhost:5173'
             headers:
               - Content-Type
               - X-Amz-Date
@@ -163,7 +163,7 @@ functions:
           path: /cursos/{id}
           method: put
           cors:
-            origin: '*'
+            origin: 'http://localhost:5173'
             headers:
               - Content-Type
               - X-Amz-Date
@@ -189,7 +189,7 @@ functions:
           path: /cursos/{id}
           method: delete
           cors:
-            origin: '*'
+            origin: 'http://localhost:5173'
             headers:
               - Content-Type
               - X-Amz-Date

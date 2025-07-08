@@ -54,7 +54,7 @@ functions:
           path: /usuarios/register
           method: post
           cors:
-            origin: '*'
+            origin: 'http://localhost:5173'
             headers:
               - Content-Type
               - X-Amz-Date
@@ -75,7 +75,7 @@ functions:
           path: /usuarios/login
           method: post
           cors:
-            origin: '*'
+            origin: 'http://localhost:5173'
             headers:
               - Content-Type
               - X-Amz-Date
@@ -95,7 +95,7 @@ functions:
           path: /usuarios/validarToken
           method: post
           cors:
-            origin: '*'
+            origin: 'http://localhost:5173'
             headers:
               - Content-Type
               - X-Amz-Date

@@ -48,7 +48,7 @@ functions:
           path: /compras
           method: post
           cors:
-            origin: '*'
+            origin: 'http://localhost:5173'
             headers:
               - Content-Type
               - X-Amz-Date
@@ -75,7 +75,7 @@ functions:
           path: /compras
           method: get
           cors:
-            origin: '*'
+            origin: 'http://localhost:5173'
             headers:
               - Content-Type
               - X-Amz-Date
