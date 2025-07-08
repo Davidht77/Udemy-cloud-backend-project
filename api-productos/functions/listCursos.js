@@ -5,11 +5,6 @@ const dynamodb = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = process.env.CURSOS_TABLE_NAME;
 
 const getTenantId = (event) => {
-  // Try to get tenant_id from authorizer context first
-  if (event.requestContext && event.requestContext.authorizer && event.requestContext.authorizer.lambda && event.requestContext.authorizer.lambda.tenant_id) {
-    return event.requestContext.authorizer.lambda.tenant_id;
-  }
-  // Fallback to query string parameters for testing or direct access if needed
   return event.queryStringParameters ? event.queryStringParameters.tenant_id : null;
 };
 
