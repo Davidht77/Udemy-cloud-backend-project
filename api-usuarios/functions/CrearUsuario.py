@@ -60,7 +60,7 @@ def lambda_handler(event, context):
                 'statusCode': 200,
                 'headers': {
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': 'http://localhost:5173',
                     'Access-Control-Allow-Credentials': True
                 },
                 'body': json.dumps({'message': 'Usuario creado exitosamente', 'response': response}),
@@ -71,7 +71,7 @@ def lambda_handler(event, context):
                 'statusCode': 400,
                 'headers': {
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': 'http://localhost:5173',
                     'Access-Control-Allow-Credentials': True
                 },
                 'body': json.dumps({'error': 'Invalid request body: missing user_id, password or tenant_id'}),
@@ -85,7 +85,7 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'headers': {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Origin': 'http://localhost:5173',
                 'Access-Control-Allow-Credentials': True
             },
             'body': json.dumps({'error': str(e)}),

@@ -18,7 +18,7 @@ module.exports.getCurso = async (event) => {
         statusCode: 400,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': 'http://localhost:5173',
           'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({ message: 'Missing curso_id or tenant_id' }),
@@ -37,11 +37,11 @@ module.exports.getCurso = async (event) => {
 
     if (!result.Item) {
       return {
-        statusCode: 404,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': true
+      statusCode: 404,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': 'http://localhost:5173',
+          'Access-Control-Allow-Credentials': false
         },
         body: JSON.stringify({ message: 'Curso no encontrado' }),
       };
@@ -51,8 +51,8 @@ module.exports.getCurso = async (event) => {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
+        'Access-Control-Allow-Origin': 'http://localhost:5173',
+        'Access-Control-Allow-Credentials': false
       },
       body: JSON.stringify({ message: `Curso ${id} obtenido`, curso: result.Item }),
     };
@@ -62,8 +62,8 @@ module.exports.getCurso = async (event) => {
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
+        'Access-Control-Allow-Origin': 'http://localhost:5173',
+        'Access-Control-Allow-Credentials': false
       },
       body: JSON.stringify({ message: 'Could not get curso', error: error.message }),
     };

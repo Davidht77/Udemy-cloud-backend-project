@@ -24,7 +24,7 @@ module.exports.createCompra = async (event) => {
         statusCode: 400,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': 'http://localhost:5173',
           'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({ message: 'Missing required fields or invalid number format for quantity/price' }),
@@ -50,7 +50,7 @@ module.exports.createCompra = async (event) => {
       statusCode: 201,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'http://localhost:5173',
         'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({ message: 'Compra creada exitosamente', compra: params.Item }),
@@ -61,7 +61,7 @@ module.exports.createCompra = async (event) => {
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'http://localhost:5173',
         'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({ message: 'Could not create compra', error: error.message }),

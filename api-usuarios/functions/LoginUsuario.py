@@ -32,7 +32,9 @@ def lambda_handler(event, context):
         return {
             'statusCode': 403,
             'headers': {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': 'http://localhost:5173',
+                'Access-Control-Allow-Credentials': True
             },
             'body': json.dumps({'error': 'Usuario no existe'}),
         }
@@ -62,7 +64,9 @@ def lambda_handler(event, context):
     return {
         'statusCode': 200,
         'headers': {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': 'http://localhost:5173',
+            'Access-Control-Allow-Credentials': True
         },
         'body': json.dumps({
             'token': token,

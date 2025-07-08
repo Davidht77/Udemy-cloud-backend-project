@@ -17,7 +17,7 @@ module.exports.createCurso = async (event) => {
       statusCode: 400,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'http://localhost:5173',
         'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({
@@ -42,7 +42,7 @@ module.exports.createCurso = async (event) => {
       statusCode: 404,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'http://localhost:5173',
         'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({
@@ -72,7 +72,7 @@ module.exports.createCurso = async (event) => {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'http://localhost:5173',
         'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({ message: 'Curso creado exitosamente!' }),
@@ -83,8 +83,8 @@ module.exports.createCurso = async (event) => {
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
+        'Access-Control-Allow-Origin': 'http://localhost:5173',
+        'Access-Control-Allow-Credentials': false
       },
       body: JSON.stringify({ message: 'Could not create curso', error: error.message }),
     };

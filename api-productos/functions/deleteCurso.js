@@ -18,7 +18,7 @@ module.exports.deleteCurso = async (event) => {
         statusCode: 400,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': 'http://localhost:5173',
           'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({ message: 'Missing curso_id or tenant_id' }),
@@ -39,7 +39,7 @@ module.exports.deleteCurso = async (event) => {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'http://localhost:5173',
         'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({ message: `Curso ${id} eliminado` }),
@@ -50,7 +50,7 @@ module.exports.deleteCurso = async (event) => {
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'http://localhost:5173',
         'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({ message: 'Could not delete curso', error: error.message }),

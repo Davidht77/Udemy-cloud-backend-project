@@ -18,7 +18,7 @@ module.exports.listCompras = async (event) => {
         statusCode: 400,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': 'http://localhost:5173',
           'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({ message: 'Missing tenant_id' }),
@@ -30,7 +30,7 @@ module.exports.listCompras = async (event) => {
         statusCode: 400,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Origin': 'http://localhost:5173',
           'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({ message: 'Missing user_id' }),
@@ -64,7 +64,7 @@ module.exports.listCompras = async (event) => {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'http://localhost:5173',
         'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({
@@ -79,7 +79,7 @@ module.exports.listCompras = async (event) => {
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': 'http://localhost:5173',
         'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({ message: 'Could not list compras', error: error.message }),
