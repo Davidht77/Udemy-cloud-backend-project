@@ -57,6 +57,7 @@ functions:
               - X-Amz-Security-Token
               - X-Amz-User-Agent
               - X-Auth-Token
+              - tenant-id
             allowCredentials: true
           environment:
             COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras
@@ -84,6 +85,7 @@ functions:
               - X-Amz-Security-Token
               - X-Amz-User-Agent
               - X-Auth-Token
+              - tenant-id
             allowCredentials: true
           authorizer:
             name: validarToken
