@@ -41,7 +41,7 @@ module.exports.getCurso = async (event) => {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': 'http://localhost:5173',
-          'Access-Control-Allow-Credentials': false
+          'Access-Control-Allow-Credentials': true
         },
         body: JSON.stringify({ message: 'Curso no encontrado' }),
       };
@@ -52,7 +52,7 @@ module.exports.getCurso = async (event) => {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': 'http://localhost:5173',
-        'Access-Control-Allow-Credentials': false
+        'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({ message: `Curso ${id} obtenido`, curso: result.Item }),
     };
@@ -63,7 +63,7 @@ module.exports.getCurso = async (event) => {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': 'http://localhost:5173',
-        'Access-Control-Allow-Credentials': false
+        'Access-Control-Allow-Credentials': true
       },
       body: JSON.stringify({ message: 'Could not get curso', error: error.message }),
     };
