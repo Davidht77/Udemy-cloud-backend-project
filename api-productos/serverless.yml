@@ -146,6 +146,7 @@ functions:
               - X-Amz-Security-Token
               - X-Amz-User-Agent
               - X-Auth-Token
+              - tenant-id
             allowCredentials: true
           authorizer:
             name: validarToken
@@ -172,6 +173,7 @@ functions:
               - X-Amz-Security-Token
               - X-Amz-User-Agent
               - X-Auth-Token
+              - tenant-id
             allowCredentials: true
           authorizer:
             name: validarToken
@@ -198,6 +200,7 @@ functions:
               - X-Amz-Security-Token
               - X-Amz-User-Agent
               - X-Auth-Token
+              - tenant-id
             allowCredentials: true
           authorizer:
             name: validarToken
@@ -215,7 +218,7 @@ functions:
           path: /cursos
           method: get
           cors:
-            origin: '*'
+            origin: 'http://localhost:5173'
             headers:
               - Content-Type
               - X-Amz-Date
