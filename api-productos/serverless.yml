@@ -66,68 +66,12 @@ functions:
               - X-Amz-User-Agent
               - X-Auth-Token
             allowCredentials: true
-      - http:
-          path: /cursos/{id}
-          method: options  # preflight
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - tenant-id
-            allowCredentials: true
           authorizer:
             name: validarToken
             arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
-      - http:
-          path: /cursos/{id}
-          method: options  # preflight
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - tenant-id
-            allowCredentials: true
-      - http:
-          path: /cursos/category
-          method: options  # preflight
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - tenant-id
-            allowCredentials: true
-      - http:
-          path: /cursos/search
-          method: options  # preflight
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - tenant-id
-            allowCredentials: true
       - http:
           path: /cursos
           method: options  # preflight
@@ -168,9 +112,20 @@ functions:
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
-
-
-
+      - http:
+          path: /cursos/search
+          method: options  # preflight
+          cors:
+            origin: 'http://localhost:5173'
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amz-Date
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - tenant-id
+            allowCredentials: true
 
   searchCursosByCategory:
     handler: functions/searchCursosByCategory.searchCursosByCategory
@@ -197,6 +152,20 @@ functions:
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
+      - http:
+          path: /cursos/category
+          method: options  # preflight
+          cors:
+            origin: 'http://localhost:5173'
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amz-Date
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - tenant-id
+            allowCredentials: true
 
   getCurso:
     handler: functions/getCurso.getCurso
@@ -224,6 +193,20 @@ functions:
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
+      - http:
+          path: /cursos/{id}
+          method: options  # preflight
+          cors:
+            origin: 'http://localhost:5173'
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amz-Date
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - tenant-id
+            allowCredentials: true
 
   updateCurso:
     handler: functions/updateCurso.updateCurso
@@ -251,6 +234,20 @@ functions:
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
+      - http:
+          path: /cursos/{id}
+          method: options  # preflight
+          cors:
+            origin: 'http://localhost:5173'
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amz-Date
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - tenant-id
+            allowCredentials: true
 
   deleteCurso:
     handler: functions/deleteCurso.deleteCurso
@@ -278,6 +275,20 @@ functions:
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
+      - http:
+          path: /cursos/{id}
+          method: options  # preflight
+          cors:
+            origin: 'http://localhost:5173'
+            headers:
+              - Content-Type
+              - Authorization
+              - X-Amz-Date
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+              - tenant-id
+            allowCredentials: true
             
   listCursos:
     handler: functions/listCursos.listCursos
