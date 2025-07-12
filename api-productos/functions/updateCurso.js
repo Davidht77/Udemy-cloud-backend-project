@@ -4,6 +4,14 @@ const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = process.env.CURSOS_TABLE_NAME;
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': 'http://localhost:5173',
+  'Access-Control-Allow-Credentials': 'true',
+  'Access-Control-Allow-Headers':
+    'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,tenant-id',
+  'Access-Control-Allow-Methods': 'GET,OPTIONS',
+};
+
 const getTenantId = (event) => {
   return event.headers ? event.headers['tenant-id'] : 'default_tenant';
 };
@@ -18,11 +26,7 @@ module.exports.updateCurso = async (event) => {
     if (!id || !tenantId) {
       return {
         statusCode: 400,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'http://localhost:5173',
-          'Access-Control-Allow-Credentials': true
-        },
+        headers: corsHeaders,
         body: JSON.stringify({ message: 'Missing curso_id or tenant_id' }),
       };
     }

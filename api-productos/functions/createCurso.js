@@ -5,11 +5,12 @@ const { v4: uuidv4 } = require('uuid');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = process.env.CURSOS_TABLE_NAME;
 
-const headers = {
-  'Content-Type': 'application/json',
-  // Consider using an environment variable for the origin in production
+const corsHeaders = {
   'Access-Control-Allow-Origin': 'http://localhost:5173',
-  'Access-Control-Allow-Credentials': true,
+  'Access-Control-Allow-Credentials': 'true',
+  'Access-Control-Allow-Headers':
+    'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,tenant-id',
+  'Access-Control-Allow-Methods': 'GET,OPTIONS',
 };
 
 module.exports.createCurso = async (event) => {
@@ -22,7 +23,7 @@ module.exports.createCurso = async (event) => {
   if (!tenant_id || !nombre || !descripcion || !duracion || !imagen_url || !categories || !Array.isArray(categories) || categories.length === 0 || precio === undefined || rating === undefined) {
     return {
       statusCode: 400,
-      headers,
+      corsHeaders,
       body: JSON.stringify({
         message: 'Faltan campos requeridos. Asegúrate de proporcionar tenant_id, nombre, descripcion, duracion, imagen_url, categories (como un array no vacío), precio y rating.',
       }),
@@ -43,7 +44,7 @@ module.exports.createCurso = async (event) => {
   if (userResult.Items.length === 0) {
     return {
       statusCode: 404,
-      headers,
+      corsHeaders,
       body: JSON.stringify({
         message: 'El tenant_id proporcionado no existe.',
       }),
@@ -69,14 +70,14 @@ module.exports.createCurso = async (event) => {
 
     return {
       statusCode: 200,
-      headers,
+      corsHeaders,
       body: JSON.stringify({ message: 'Curso creado exitosamente!' }),
     };
   } catch (error) {
     console.error('Error creating curso:', error);
     return {
       statusCode: 500,
-      headers,
+      corsHeaders,
       body: JSON.stringify({ message: 'Could not create curso', error: error.message }),
     };
   }

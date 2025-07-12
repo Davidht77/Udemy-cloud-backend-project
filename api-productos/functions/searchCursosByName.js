@@ -4,6 +4,14 @@ const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = process.env.CURSOS_TABLE_NAME;
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': 'http://localhost:5173',
+  'Access-Control-Allow-Credentials': 'true',
+  'Access-Control-Allow-Headers':
+    'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,tenant-id',
+  'Access-Control-Allow-Methods': 'GET,OPTIONS',
+};
+
 const getTenantId = (event) => {
   return event.queryStringParameters ? event.queryStringParameters.tenant_id : null;
 };
@@ -16,11 +24,7 @@ module.exports.searchCursosByName = async (event) => {
     if (!tenantId) {
       return {
         statusCode: 400,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'http://localhost:5173',
-          'Access-Control-Allow-Credentials': true
-        },
+        headers: corsHeaders,
         body: JSON.stringify({ message: 'Missing tenant_id' }),
       };
     }
@@ -28,11 +32,7 @@ module.exports.searchCursosByName = async (event) => {
     if (!name) {
       return {
         statusCode: 400,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'http://localhost:5173',
-          'Access-Control-Allow-Credentials': true
-        },
+        headers: corsHeaders,
         body: JSON.stringify({ message: 'Missing name query parameter for search' }),
       };
     }
@@ -59,11 +59,7 @@ module.exports.searchCursosByName = async (event) => {
 
     return {
       statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'http://localhost:5173',
-        'Access-Control-Allow-Credentials': true
-      },
+      headers: corsHeaders,
       body: JSON.stringify({
         message: `Cursos encontrados con el nombre que contiene '${name}'`,
         cursos: result.Items,
@@ -74,11 +70,7 @@ module.exports.searchCursosByName = async (event) => {
     console.error('Error searching cursos by name:', error);
     return {
       statusCode: 500,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'http://localhost:5173',
-        'Access-Control-Allow-Credentials': true
-      },
+      headers: corsHeaders,
       body: JSON.stringify({ message: 'Could not search cursos by name', error: error.message }),
     };
   }

@@ -21,10 +21,7 @@ module.exports.searchCursosByCategory = async (event) => {
         return {
             statusCode: 400,
             headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': 'http://localhost:5173',
-                'Access-Control-Allow-Credentials': true
-            },
+                headers: corsHeaders,,
             body: JSON.stringify({ message: 'Missing tenant_id' }),
         };
     }
@@ -33,10 +30,7 @@ module.exports.searchCursosByCategory = async (event) => {
         return {
             statusCode: 400,
             headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': 'http://localhost:5173',
-                'Access-Control-Allow-Credentials': true
-            },
+                headers: corsHeaders,,
             body: JSON.stringify({ message: 'Category is required' }),
         };
     }
@@ -55,10 +49,7 @@ module.exports.searchCursosByCategory = async (event) => {
         return {
             statusCode: 200,
             headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': 'http://localhost:5173',
-                'Access-Control-Allow-Credentials': true
-            },
+                headers: corsHeaders,,
             body: JSON.stringify(result.Items),
         };
     } catch (error) {
@@ -66,10 +57,7 @@ module.exports.searchCursosByCategory = async (event) => {
         return {
             statusCode: 500,
             headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': 'http://localhost:5173',
-                'Access-Control-Allow-Credentials': true
-            },
+                headers: corsHeaders,,
             body: JSON.stringify({ message: 'Could not search courses by category', error: error.message }),
         };
     }

@@ -4,6 +4,14 @@ const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const TABLE_NAME = process.env.COMPRAS_TABLE_NAME;
 
+const corsHeaders = {
+  'Access-Control-Allow-Origin': 'http://localhost:5173',
+  'Access-Control-Allow-Credentials': 'true',
+  'Access-Control-Allow-Headers':
+    'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,tenant-id',
+  'Access-Control-Allow-Methods': 'GET,OPTIONS',
+};
+
 const getTenantId = (event) => {
   return event.queryStringParameters ? event.queryStringParameters.tenant_id : null;
 };
@@ -16,11 +24,7 @@ module.exports.listCompras = async (event) => {
     if (!tenantId) {
       return {
         statusCode: 400,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'http://localhost:5173',
-          'Access-Control-Allow-Credentials': true
-        },
+        headers: corsHeaders,
         body: JSON.stringify({ message: 'Missing tenant_id' }),
       };
     }
@@ -28,11 +32,7 @@ module.exports.listCompras = async (event) => {
     if(!user_id){
       return {
         statusCode: 400,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': 'http://localhost:5173',
-          'Access-Control-Allow-Credentials': true
-        },
+        headers: corsHeaders,
         body: JSON.stringify({ message: 'Missing user_id' }),
       };
     }
@@ -62,11 +62,7 @@ module.exports.listCompras = async (event) => {
 
     return {
       statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'http://localhost:5173',
-        'Access-Control-Allow-Credentials': true
-      },
+      headers: corsHeaders,
       body: JSON.stringify({
         message: 'Lista de compras obtenida',
         compras: result.Items,
@@ -77,11 +73,7 @@ module.exports.listCompras = async (event) => {
     console.error('Error listing compras:', error);
     return {
       statusCode: 500,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': 'http://localhost:5173',
-        'Access-Control-Allow-Credentials': true
-      },
+      headers: corsHeaders,
       body: JSON.stringify({ message: 'Could not list compras', error: error.message }),
     };
   }
