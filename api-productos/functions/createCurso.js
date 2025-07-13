@@ -25,7 +25,7 @@ module.exports.createCurso = async (event) => {
   if (!tenant_id || !nombre || !descripcion || !duracion || !imagen_url || !categories || !Array.isArray(categories) || categories.length === 0 || precio === undefined || rating === undefined) {
     return {
       statusCode: 400,
-      corsHeaders,
+      headers: corsHeaders,
       body: JSON.stringify({
         message: 'Faltan campos requeridos. Asegúrate de proporcionar tenant_id, nombre, descripcion, duracion, imagen_url, categories (como un array no vacío), precio y rating.',
       }),
@@ -47,7 +47,7 @@ module.exports.createCurso = async (event) => {
   if (userResult.Items.length === 0) {
     return {
       statusCode: 404,
-      corsHeaders,
+      headers: corsHeaders,
       body: JSON.stringify({
         message: 'El tenant_id proporcionado no existe.',
       }),
@@ -69,18 +69,20 @@ module.exports.createCurso = async (event) => {
       },
     };
 
+    console.log('Attempting to put item with params:', params);
     await dynamodb.put(params).promise();
+    console.log('Item successfully put into DynamoDB.');
 
     return {
       statusCode: 200,
-      corsHeaders,
+      headers: corsHeaders,
       body: JSON.stringify({ message: 'Curso creado exitosamente!' }),
     };
   } catch (error) {
     console.error('Error creating curso:', error);
     return {
       statusCode: 500,
-      corsHeaders,
+      headers: corsHeaders,
       body: JSON.stringify({ message: 'Could not create curso', error: error.message }),
     };
   }
