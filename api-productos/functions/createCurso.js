@@ -15,7 +15,9 @@ const corsHeaders = {
 
 module.exports.createCurso = async (event) => {
   try {
+  console.log('Received event body:', event.body);
   const body = JSON.parse(event.body);
+  console.log('Parsed event body:', body);
   const { tenant_id, nombre, descripcion, duracion, imagen_url, categories, precio, rating } = body;
   const curso_id = uuidv4();
 
@@ -40,6 +42,7 @@ module.exports.createCurso = async (event) => {
   };
 
   const userResult = await dynamodb.query(userParams).promise();
+  console.log('User validation result:', userResult);
 
   if (userResult.Items.length === 0) {
     return {
