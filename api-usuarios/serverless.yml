@@ -1,5 +1,8 @@
 service: api-usuarios
 
+plugins:
+  - serverless-aws-documentation
+
 frameworkVersion: '3'
 
 provider:
@@ -13,6 +16,61 @@ provider:
 
 custom:
   tablePrefix: ${opt:stage, self:provider.stage}
+  documentation:
+    version: '1'
+    title: 'API de Usuarios'
+    description: 'API para gestionar usuarios, autenticación y tokens de acceso'
+    models:
+      - name: "UsuarioInput"
+        contentType: "application/json"
+        schema:
+          type: "object"
+          properties:
+            tenant_id:
+              type: "string"
+            user_id:
+              type: "string"
+            password:
+              type: "string"
+      - name: "LoginInput"
+        contentType: "application/json"
+        schema:
+          type: "object"
+          properties:
+            tenant_id:
+              type: "string"
+            user_id:
+              type: "string"
+            password:
+              type: "string"
+      - name: "TokenValidationInput"
+        contentType: "application/json"
+        schema:
+          type: "object"
+          properties:
+            token:
+              type: "string"
+      - name: "SuccessResponse"
+        contentType: "application/json"
+        schema:
+          type: "object"
+          properties:
+            message:
+              type: "string"
+      - name: "LoginSuccessResponse"
+        contentType: "application/json"
+        schema:
+          type: "object"
+          properties:
+            token:
+              type: "string"
+      - name: "ErrorResponse"
+        contentType: "application/json"
+        schema:
+          type: "object"
+          properties:
+            error:
+              type: "string"
 
 resources:
   Resources:
@@ -64,22 +122,24 @@ functions:
               - X-Amz-User-Agent
               - X-Auth-Token
             allowCredentials: true
+          documentation:
+            summary: "Registrar un nuevo usuario"
+            description: "Crea un nuevo usuario en el sistema con un tenant_id, user_id y password."
+            requestModels:
+              "application/json": "UsuarioInput"
+            methodResponses:
+              - statusCode: '201'
+                responseBody:
+                  description: "Usuario creado exitosamente"
+                responseModels:
+                  "application/json": "SuccessResponse"
+              - statusCode: '400'
+                responseBody:
+                  description: "Error en la petición"
+                responseModels:
+                  "application/json": "ErrorResponse"
       - http:
           path: /usuarios/validarToken
-          method: options  # preflight
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - tenant-id
-            allowCredentials: true
-      - http:
-          path: /usuarios/register
           method: options  # preflight
           cors:
             origin: 'http://localhost:5173'
@@ -113,6 +173,22 @@ functions:
               - X-Amz-User-Agent
               - X-Auth-Token
             allowCredentials: true
+          documentation:
+            summary: "Iniciar sesión"
+            description: "Autentica a un usuario y devuelve un token de acceso."
+            requestModels:
+              "application/json": "LoginInput"
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: "Login exitoso, devuelve token"
+                responseModels:
+                  "application/json": "LoginSuccessResponse"
+              - statusCode: '401'
+                responseBody:
+                  description: "Credenciales inválidas"
+                responseModels:
+                  "application/json": "ErrorResponse"
 
   validarToken:
     handler: functions/ValidarTokenAcceso.lambda_handler
@@ -133,4 +209,20 @@ functions:
               - X-Amz-User-Agent
               - X-Auth-Token
             allowCredentials: true
+          documentation:
+            summary: "Validar token de acceso"
+            description: "Verifica si un token de acceso es válido."
+            requestModels:
+              "application/json": "TokenValidationInput"
+            methodResponses:
+              - statusCode: '200'
+                responseBody:
+                  description: "El token es válido"
+                responseModels:
+                  "application/json": "SuccessResponse"
+              - statusCode: '401'
+                responseBody:
+                  description: "El token es inválido o ha expirado"
+                responseModels:
+                  "application/json": "ErrorResponse"
 
