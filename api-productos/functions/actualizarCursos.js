@@ -13,13 +13,22 @@ exports.handler = async (event) => {
       const newImage = AWS.DynamoDB.Converter.unmarshall(record.dynamodb.NewImage);
       console.log('New product data:', newImage); // Log para ver los datos que estamos recibiendo
 
+      // --- INICIO: Logs de depuración para el campo 'duracion' ---
+      console.log(`DEBUG: Raw newImage.duracion: [${newImage.duracion}]`);
+      console.log(`DEBUG: typeof newImage.duracion: [${typeof newImage.duracion}]`);
+      
       const duracionCruda = newImage.duracion || '';
+      console.log(`DEBUG: duracionCruda (después de || ''): [${duracionCruda}]`);
+
+      const duracionLimpia = String(duracionCruda).replace(/;/g, '');
+      console.log(`DEBUG: duracionLimpia (después de replace): [${duracionLimpia}]`);
+      // --- FIN: Logs de depuración ---
 
       const producto = {
         sku: newImage.curso_id,  // Usamos curso_id como ID en Elasticsearch
         nombre: newImage.nombre,
         descripcion: newImage.descripcion,
-        duracion: String(duracionCruda).replace(/;/g, '')
+        duracion: duracionLimpia
       };
 
       const data = JSON.stringify(producto);
