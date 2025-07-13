@@ -22,11 +22,6 @@ jobs:
         with:
           node-version: '18' # Usa la misma versión de Node.js que tus Lambdas
 
-      # No necesitamos instalar Serverless globalmente si usamos la acción aws-actions/configure-aws-credentials
-      # que ya trae el Serverless CLI preinstalado en el runner o si lo manejamos via npm en cada subdirectorio.
-      # Sin embargo, si lo prefieres, puedes mantenerlo, pero es menos necesario si cada servicio tiene su package.json.
-      # Si tus servicios no tienen package.json para npm install, entonces sí, installalo global.
-      # Para mayor consistencia, podemos instalarlo globalmente, aunque npm install en cada repo es más común.
       - name: Install Serverless Framework (global)
         run: npm install -g serverless@3
 

@@ -18,9 +18,14 @@ provider:
           - dynamodb:DeleteItem
           - dynamodb:Query
           - dynamodb:Scan
+          - dynamodb:DescribeStream
+          - dynamodb:GetRecords
+          - dynamodb:GetShardIterator
+          - dynamodb:ListStreams
         Resource:
-          - "arn:aws:dynamodb:${self:provider.region}:*:table/prod_cursos"
-          - "arn:aws:dynamodb:${self:provider.region}:*:table/prod_user"
+          - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tablePrefix}_cursos"
+          - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tablePrefix}_user"
+          - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tablePrefix}_cursos/stream/*"
   stage: dev
   region: us-east-1 #
 
@@ -329,3 +334,16 @@ functions:
               - X-Amz-User-Agent
               - tenant-id
             allowCredentials: true
+
+  actualizarCursos:
+    handler: functions/actualizarCursos.handler
+    events:
+      - stream:
+          type: dynamodb
+          arn: arn:aws:dynamodb:us-east-1:150209693186:table/dev_cursos/stream/2025-07-13T20:47:08.739 # Reemplaza con el ARN correcto del Stream
+          batchSize: 5
+          startingPosition: LATEST
+    environment:
+      ES_HOST: '34.206.17.81'  # IP de tu Elasticsearch
+      ES_PORT: 9200
+      ES_INDEX: 'productos'
