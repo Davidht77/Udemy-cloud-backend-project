@@ -79,20 +79,6 @@ functions:
               - tenant-id
             allowCredentials: true
       - http:
-          path: /usuarios/login
-          method: options  # preflight
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - tenant-id
-            allowCredentials: true
-      - http:
           path: /usuarios/register
           method: options  # preflight
           cors:
