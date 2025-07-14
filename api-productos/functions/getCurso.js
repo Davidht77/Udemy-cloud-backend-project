@@ -17,6 +17,15 @@ const getTenantId = (event) => {
 };
 
 module.exports.getCurso = async (event) => {
+  // Manejo de preflight
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: corsHeaders,
+      body: '',
+    };
+  }
+
   try {
     const tenantId = getTenantId(event);
     const { id } = event.pathParameters;
@@ -41,13 +50,11 @@ module.exports.getCurso = async (event) => {
 
     if (!result.Item) {
       return {
-      statusCode: 404,
-      headers: {
+        statusCode: 404,
         headers: corsHeaders,
         body: JSON.stringify({ message: 'Curso no encontrado' }),
-      }
+      };
     }
-  }
 
     return {
       statusCode: 200,

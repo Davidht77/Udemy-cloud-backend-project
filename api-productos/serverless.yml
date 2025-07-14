@@ -73,7 +73,7 @@ functions:
             allowCredentials: true
           authorizer:
             name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
+            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
@@ -113,7 +113,7 @@ functions:
             allowCredentials: true
           authorizer:
             name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
+            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
@@ -153,7 +153,7 @@ functions:
             allowCredentials: true
           authorizer:
             name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
+            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
@@ -194,7 +194,7 @@ functions:
             allowCredentials: true
           authorizer:
             name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
+            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
@@ -235,7 +235,7 @@ functions:
             allowCredentials: true
           authorizer:
             name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
+            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
@@ -276,7 +276,7 @@ functions:
             allowCredentials: true
           authorizer:
             name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
+            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
@@ -316,7 +316,7 @@ functions:
             allowCredentials: true
           authorizer:
             name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-dev-validarToken
+            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
             resultTtlInSeconds: 0
             identitySource: method.request.header.Authorization
             type: token
