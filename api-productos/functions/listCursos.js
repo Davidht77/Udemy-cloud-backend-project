@@ -2,13 +2,11 @@
 
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
+const lambda = new AWS.Lambda();
+
 const TABLE_NAME = process.env.CURSOS_TABLE_NAME;
-
-// Función para extraer el tenant_id desde query params
-const getTenantId = (event) => {
-  return event.queryStringParameters ? event.queryStringParameters.tenant_id : null;
-};
-
+const STAGE = process.env.STAGE || 'dev';
+const VALIDADOR_FN_NAME = `api-usuarios-${STAGE}-validarToken`;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': 'http://localhost:5173',
@@ -16,29 +14,51 @@ const corsHeaders = {
   'Access-Control-Allow-Headers':
     'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,tenant-id',
   'Access-Control-Allow-Methods': 'GET,OPTIONS',
-}
+};
 
 module.exports.listCursos = async (event) => {
-  // Manejo del preflight (CORS)
+  // 1. Manejo de preflight (CORS)
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 200,
-      headers: corsHeaders ,
-      body: ''
+      headers: corsHeaders,
+      body: '',
     };
   }
 
- try {
-    const tenantId = getTenantId(event);
-    const { limit, lastEvaluatedKey } = event.queryStringParameters || {};
-
-    if (!tenantId) {
+  try {
+    // 2. Extraer el token de autorización
+    const token = event.headers && event.headers.Authorization;
+    if (!token) {
       return {
-        statusCode: 400,
-        headers:corsHeaders ,
-        body: JSON.stringify({ message: 'Missing tenant_id' }),
+        statusCode: 401,
+        headers: corsHeaders,
+        body: JSON.stringify({ message: 'Token de autorización no proporcionado' }),
       };
     }
+
+    // 3. Invocar la función Lambda validadora
+    const validationResponse = await lambda.invoke({
+      FunctionName: VALIDADOR_FN_NAME,
+      InvocationType: 'RequestResponse',
+      Payload: JSON.stringify({ headers: { Authorization: token } }),
+    }).promise();
+
+    const validationResult = JSON.parse(validationResponse.Payload);
+
+    // 4. Verificar si el token es válido
+    if (validationResult.statusCode !== 200) {
+      return {
+        statusCode: 403,
+        headers: corsHeaders,
+        body: JSON.stringify({ message: 'Token inválido o expirado' }),
+      };
+    }
+
+    // 5. Si el token es válido, obtener el tenant_id y proceder
+    const authorizerContext = JSON.parse(validationResult.body);
+    const tenantId = authorizerContext.tenant_id;
+    const { limit, lastEvaluatedKey } = event.queryStringParameters || {};
 
     const params = {
       TableName: TABLE_NAME,
@@ -59,7 +79,7 @@ module.exports.listCursos = async (event) => {
 
     return {
       statusCode: 200,
-      headers: corsHeaders ,
+      headers: corsHeaders,
       body: JSON.stringify({
         message: 'Lista de cursos obtenida',
         cursos: result.Items,
@@ -74,7 +94,7 @@ module.exports.listCursos = async (event) => {
       statusCode: 500,
       headers: corsHeaders,
       body: JSON.stringify({
-        message: 'Could not list cursos',
+        message: 'No se pudo obtener la lista de cursos',
         error: error.message,
       }),
     };

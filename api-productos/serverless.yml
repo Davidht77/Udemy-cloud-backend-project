@@ -12,6 +12,11 @@ provider:
     statements:
       - Effect: Allow
         Action:
+          - lambda:InvokeFunction
+        Resource:
+          - arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
+      - Effect: Allow
+        Action:
           - dynamodb:PutItem
           - dynamodb:GetItem
           - dynamodb:UpdateItem
@@ -56,6 +61,7 @@ functions:
     environment:
       CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
       USERS_TABLE_NAME: ${self:custom.tablePrefix}_user
+      STAGE: ${self:provider.stage}
     events:
       - http:
           path: /cursos
@@ -69,26 +75,6 @@ functions:
               - X-Api-Key
               - X-Amz-Security-Token
               - X-Amz-User-Agent
-              - X-Auth-Token
-            allowCredentials: true
-          authorizer:
-            name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
-            type: token
-      - http:
-          path: /cursos
-          method: options  # preflight
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
               - tenant-id
             allowCredentials: true
 
@@ -96,6 +82,7 @@ functions:
     handler: functions/searchCursosByName.searchCursosByName
     environment:
       CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
+      STAGE: ${self:provider.stage}
     events:
       - http:
           path: /cursos/search
@@ -106,26 +93,6 @@ functions:
               - Content-Type
               - X-Amz-Date
               - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - X-Auth-Token
-            allowCredentials: true
-          authorizer:
-            name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
-            type: token
-      - http:
-          path: /cursos/search
-          method: options  # preflight
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amz-Date
               - X-Api-Key
               - X-Amz-Security-Token
               - X-Amz-User-Agent
@@ -136,6 +103,7 @@ functions:
     handler: functions/searchCursosByCategory.searchCursosByCategory
     environment:
       CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
+      STAGE: ${self:provider.stage}
     events:
       - http:
           path: /cursos/category
@@ -146,26 +114,6 @@ functions:
               - Content-Type
               - X-Amz-Date
               - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - X-Auth-Token
-            allowCredentials: true
-          authorizer:
-            name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
-            type: token
-      - http:
-          path: /cursos/category
-          method: options  # preflight
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amz-Date
               - X-Api-Key
               - X-Amz-Security-Token
               - X-Amz-User-Agent
@@ -176,6 +124,7 @@ functions:
     handler: functions/getCurso.getCurso
     environment:
       CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
+      STAGE: ${self:provider.stage}
     events:
       - http:
           path: /cursos/{id}
@@ -189,27 +138,6 @@ functions:
               - X-Api-Key
               - X-Amz-Security-Token
               - X-Amz-User-Agent
-              - X-Auth-Token
-              - tenant-id
-            allowCredentials: true
-          authorizer:
-            name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
-            type: token
-      - http:
-          path: /cursos/{id}
-          method: options  # preflight
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
               - tenant-id
             allowCredentials: true
 
@@ -217,6 +145,7 @@ functions:
     handler: functions/updateCurso.updateCurso
     environment:
       CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
+      STAGE: ${self:provider.stage}
     events:
       - http:
           path: /cursos/{id}
@@ -230,27 +159,6 @@ functions:
               - X-Api-Key
               - X-Amz-Security-Token
               - X-Amz-User-Agent
-              - X-Auth-Token
-              - tenant-id
-            allowCredentials: true
-          authorizer:
-            name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
-            type: token
-      - http:
-          path: /cursos/{id}
-          method: options  # preflight
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
               - tenant-id
             allowCredentials: true
 
@@ -258,6 +166,7 @@ functions:
     handler: functions/deleteCurso.deleteCurso
     environment:
       CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
+      STAGE: ${self:provider.stage}
     events:
       - http:
           path: /cursos/{id}
@@ -271,27 +180,6 @@ functions:
               - X-Api-Key
               - X-Amz-Security-Token
               - X-Amz-User-Agent
-              - X-Auth-Token
-              - tenant-id
-            allowCredentials: true
-          authorizer:
-            name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
-            type: token
-      - http:
-          path: /cursos/{id}
-          method: options  # preflight
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
               - tenant-id
             allowCredentials: true
             
@@ -299,6 +187,7 @@ functions:
     handler: functions/listCursos.listCursos
     environment:
       CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
+      STAGE: ${self:provider.stage}
     events:
       - http:
           path: /cursos
@@ -309,26 +198,6 @@ functions:
               - Content-Type
               - X-Amz-Date
               - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - X-Auth-Token
-            allowCredentials: true
-          authorizer:
-            name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
-            type: token
-      - http:
-          path: /cursos
-          method: options  # preflight
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amz-Date
               - X-Api-Key
               - X-Amz-Security-Token
               - X-Amz-User-Agent

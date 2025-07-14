@@ -3,61 +3,84 @@
 const AWS = require('aws-sdk');
 const { v4: uuidv4 } = require('uuid');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
+const lambda = new AWS.Lambda();
+
 const TABLE_NAME = process.env.CURSOS_TABLE_NAME;
+const STAGE = process.env.STAGE || 'dev';
+const VALIDADOR_FN_NAME = `api-usuarios-${STAGE}-validarToken`;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': 'http://localhost:5173',
   'Access-Control-Allow-Credentials': 'true',
   'Access-Control-Allow-Headers':
     'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,tenant-id',
-  'Access-Control-Allow-Methods': 'GET,OPTIONS',
+  'Access-Control-Allow-Methods': 'POST,OPTIONS',
 };
 
 module.exports.createCurso = async (event) => {
+  // 1. Manejo de preflight (CORS)
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: corsHeaders,
+      body: '',
+    };
+  }
+
   try {
-  console.log('Received event body:', event.body);
-  const body = JSON.parse(event.body);
-  console.log('Parsed event body:', body);
-  const { tenant_id, nombre, descripcion, duracion, imagen_url, categories, precio, rating } = body;
-  const curso_id = uuidv4();
+    // 2. Extraer el token de autorización
+    const token = event.headers && event.headers.Authorization;
+    if (!token) {
+      return {
+        statusCode: 401,
+        headers: corsHeaders,
+        body: JSON.stringify({ message: 'Token de autorización no proporcionado' }),
+      };
+    }
 
-  // Validar que los campos requeridos existan
-  if (!tenant_id || !nombre || !descripcion || !duracion || !imagen_url || !categories || !Array.isArray(categories) || categories.length === 0 || precio === undefined || rating === undefined) {
-    return {
-      statusCode: 400,
-      headers: corsHeaders,
-      body: JSON.stringify({
-        message: 'Faltan campos requeridos. Asegúrate de proporcionar tenant_id, nombre, descripcion, duracion, imagen_url, categories (como un array no vacío), precio y rating.',
-      }),
-    };
-  }
+    // 3. Invocar la función Lambda validadora
+    const validationResponse = await lambda.invoke({
+      FunctionName: VALIDADOR_FN_NAME,
+      InvocationType: 'RequestResponse',
+      Payload: JSON.stringify({ headers: { Authorization: token } }),
+    }).promise();
 
-  // Validar que el tenant_id existe en la tabla de usuarios
-  const userParams = {
-    TableName: process.env.USERS_TABLE_NAME,
-    KeyConditionExpression: 'tenant_id = :tenant_id',
-    ExpressionAttributeValues: {
-      ':tenant_id': tenant_id,
-    },
-  };
+    const validationResult = JSON.parse(validationResponse.Payload);
 
-  const userResult = await dynamodb.query(userParams).promise();
-  console.log('User validation result:', userResult);
+    // 4. Verificar si el token es válido
+    if (validationResult.statusCode !== 200) {
+      return {
+        statusCode: 403,
+        headers: corsHeaders,
+        body: JSON.stringify({ message: 'Token inválido o expirado' }),
+      };
+    }
 
-  if (userResult.Items.length === 0) {
-    return {
-      statusCode: 404,
-      headers: corsHeaders,
-      body: JSON.stringify({
-        message: 'El tenant_id proporcionado no existe.',
-      }),
-    };
-  }
+    // 5. Si el token es válido, obtener el tenant_id y proceder
+    const authorizerContext = JSON.parse(validationResult.body);
+    const tenantId = authorizerContext.tenant_id;
+
+    console.log('Received event body:', event.body);
+    const body = JSON.parse(event.body);
+    console.log('Parsed event body:', body);
+    const { nombre, descripcion, duracion, imagen_url, categories, precio, rating } = body;
+    const curso_id = uuidv4();
+
+    // Validar que los campos requeridos existan
+    if (!nombre || !descripcion || !duracion || !imagen_url || !categories || !Array.isArray(categories) || categories.length === 0 || precio === undefined || rating === undefined) {
+      return {
+        statusCode: 400,
+        headers: corsHeaders,
+        body: JSON.stringify({
+          message: 'Faltan campos requeridos. Asegúrate de proporcionar nombre, descripcion, duracion, imagen_url, categories (como un array no vacío), precio y rating.',
+        }),
+      };
+    }
 
     const params = {
       TableName: TABLE_NAME,
       Item: {
-        tenant_id: tenant_id,
+        tenant_id: tenantId,
         curso_id: curso_id,
         nombre: nombre,
         descripcion: descripcion,
@@ -76,14 +99,14 @@ module.exports.createCurso = async (event) => {
     return {
       statusCode: 200,
       headers: corsHeaders,
-      body: JSON.stringify({ message: 'Curso creado exitosamente!' }),
+      body: JSON.stringify({ message: 'Curso creado exitosamente!', curso_id: curso_id }),
     };
   } catch (error) {
     console.error('Error creating curso:', error);
     return {
       statusCode: 500,
       headers: corsHeaders,
-      body: JSON.stringify({ message: 'Could not create curso', error: error.message }),
+      body: JSON.stringify({ message: 'No se pudo crear el curso', error: error.message }),
     };
   }
 };

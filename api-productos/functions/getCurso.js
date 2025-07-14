@@ -2,7 +2,12 @@
 
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
+const lambda = new AWS.Lambda();
+
 const TABLE_NAME = process.env.CURSOS_TABLE_NAME;
+// El nombre de la función validadora se construye dinámicamente
+const STAGE = process.env.STAGE || 'dev';
+const VALIDADOR_FN_NAME = `api-usuarios-${STAGE}-validarToken`;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': 'http://localhost:5173',
@@ -12,12 +17,8 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'GET,OPTIONS',
 };
 
-const getTenantId = (event) => {
-  return event.headers ? event.headers['tenant-id'] : 'default_tenant';
-};
-
 module.exports.getCurso = async (event) => {
-  // Manejo de preflight
+  // 1. Manejo de preflight (CORS)
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 200,
@@ -27,14 +28,44 @@ module.exports.getCurso = async (event) => {
   }
 
   try {
-    const tenantId = getTenantId(event);
+    // 2. Extraer el token de autorización
+    const token = event.headers && event.headers.Authorization;
+    if (!token) {
+      return {
+        statusCode: 401,
+        headers: corsHeaders,
+        body: JSON.stringify({ message: 'Token de autorización no proporcionado' }),
+      };
+    }
+
+    // 3. Invocar la función Lambda validadora
+    const validationResponse = await lambda.invoke({
+      FunctionName: VALIDADOR_FN_NAME,
+      InvocationType: 'RequestResponse',
+      Payload: JSON.stringify({ headers: { Authorization: token } }), // El validador espera el token en este formato
+    }).promise();
+
+    const validationResult = JSON.parse(validationResponse.Payload);
+
+    // 4. Verificar si el token es válido
+    if (validationResult.statusCode !== 200) {
+      return {
+        statusCode: 403, // Forbidden
+        headers: corsHeaders,
+        body: JSON.stringify({ message: 'Token inválido o expirado' }),
+      };
+    }
+
+    // 5. Si el token es válido, obtener el tenant_id y proceder
+    const authorizerContext = JSON.parse(validationResult.body);
+    const tenantId = authorizerContext.tenant_id;
     const { id } = event.pathParameters;
 
     if (!id || !tenantId) {
       return {
         statusCode: 400,
         headers: corsHeaders,
-        body: JSON.stringify({ message: 'Missing curso_id or tenant_id' }),
+        body: JSON.stringify({ message: 'Falta curso_id o tenant_id no se pudo derivar del token' }),
       };
     }
 
@@ -61,12 +92,13 @@ module.exports.getCurso = async (event) => {
       headers: corsHeaders,
       body: JSON.stringify({ message: `Curso ${id} obtenido`, curso: result.Item }),
     };
+
   } catch (error) {
-    console.error('Error getting curso:', error);
+    console.error('Error en getCurso:', error);
     return {
       statusCode: 500,
       headers: corsHeaders,
-      body: JSON.stringify({ message: 'Could not get curso', error: error.message }),
+      body: JSON.stringify({ message: 'No se pudo obtener el curso', error: error.message }),
     };
   }
 };

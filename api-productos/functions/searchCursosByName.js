@@ -2,7 +2,11 @@
 
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
+const lambda = new AWS.Lambda();
+
 const TABLE_NAME = process.env.CURSOS_TABLE_NAME;
+const STAGE = process.env.STAGE || 'dev';
+const VALIDADOR_FN_NAME = `api-usuarios-${STAGE}-validarToken`;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': 'http://localhost:5173',
@@ -12,28 +16,55 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'GET,OPTIONS',
 };
 
-const getTenantId = (event) => {
-  return event.queryStringParameters ? event.queryStringParameters.tenant_id : null;
-};
-
 module.exports.searchCursosByName = async (event) => {
-  try {
-    const tenantId = getTenantId(event);
-    const { name, limit, lastEvaluatedKey } = event.queryStringParameters || {};
+  // 1. Manejo de preflight (CORS)
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: corsHeaders,
+      body: '',
+    };
+  }
 
-    if (!tenantId) {
+  try {
+    // 2. Extraer el token de autorización
+    const token = event.headers && event.headers.Authorization;
+    if (!token) {
       return {
-        statusCode: 400,
+        statusCode: 401,
         headers: corsHeaders,
-        body: JSON.stringify({ message: 'Missing tenant_id' }),
+        body: JSON.stringify({ message: 'Token de autorización no proporcionado' }),
       };
     }
+
+    // 3. Invocar la función Lambda validadora
+    const validationResponse = await lambda.invoke({
+      FunctionName: VALIDADOR_FN_NAME,
+      InvocationType: 'RequestResponse',
+      Payload: JSON.stringify({ headers: { Authorization: token } }),
+    }).promise();
+
+    const validationResult = JSON.parse(validationResponse.Payload);
+
+    // 4. Verificar si el token es válido
+    if (validationResult.statusCode !== 200) {
+      return {
+        statusCode: 403,
+        headers: corsHeaders,
+        body: JSON.stringify({ message: 'Token inválido o expirado' }),
+      };
+    }
+
+    // 5. Si el token es válido, obtener el tenant_id y proceder
+    const authorizerContext = JSON.parse(validationResult.body);
+    const tenantId = authorizerContext.tenant_id;
+    const { name, limit, lastEvaluatedKey } = event.queryStringParameters || {};
 
     if (!name) {
       return {
         statusCode: 400,
         headers: corsHeaders,
-        body: JSON.stringify({ message: 'Missing name query parameter for search' }),
+        body: JSON.stringify({ message: 'Falta el parámetro name para la búsqueda' }),
       };
     }
 
@@ -71,7 +102,7 @@ module.exports.searchCursosByName = async (event) => {
     return {
       statusCode: 500,
       headers: corsHeaders,
-      body: JSON.stringify({ message: 'Could not search cursos by name', error: error.message }),
+      body: JSON.stringify({ message: 'No se pudo buscar cursos por nombre', error: error.message }),
     };
   }
 };
