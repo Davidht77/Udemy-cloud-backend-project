@@ -46,7 +46,9 @@ def lambda_handler(event, context):
             fecha_hora_exp = datetime.now() + timedelta(minutes=60)
             registro = {
                 'token': token,
-                'expires': fecha_hora_exp.strftime('%Y-%m-%d %H:%M:%S')
+                'expires': fecha_hora_exp.strftime('%Y-%m-%d %H:%M:%S'),
+                'tenant_id': tenant_id,
+                'user_id': user_id
             }
             access_token_table_name = os.environ.get('ACCESS_TOKEN_TABLE_NAME')
             table = dynamodb.Table(access_token_table_name)

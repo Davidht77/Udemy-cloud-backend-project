@@ -96,31 +96,42 @@ def validate_token(token):
         # Acceder a DynamoDB
         dynamodb = boto3.resource('dynamodb')
         table_name = os.environ.get('ACCESS_TOKEN_TABLE_NAME')
+        logger.info(f"🔍 Consultando tabla: {table_name}")
         table = dynamodb.Table(table_name)
 
         response = table.get_item(Key={'token': token})
+        logger.info(f"🔍 Respuesta de DynamoDB: {json.dumps(response, default=str)}")
         
         if 'Item' not in response:
+            logger.warning("🚫 Token no encontrado en DynamoDB")
             return {'valid': False, 'message': 'Token no encontrado'}
 
         # Validar expiración
         item = response['Item']
+        logger.info(f"🔍 Item encontrado: {json.dumps(item, default=str)}")
         expires_str = item.get('expires')
 
         if not expires_str:
+            logger.warning("⚠ Token sin fecha de expiración")
             return {'valid': False, 'message': 'Token sin fecha de expiración'}
 
         expires = datetime.strptime(expires_str, "%Y-%m-%d %H:%M:%S")
         now = datetime.now()
 
         if now > expires:
+            logger.info(f"⌛ Token expirado. Expira: {expires_str}, Ahora: {now}")
             return {'valid': False, 'message': 'Token expirado'}
 
         # Token válido, devolver datos del usuario
+        tenant_id = item.get('tenant_id')
+        user_id = item.get('user_id')
+        
+        logger.info(f"✅ Token válido. tenant_id: {tenant_id}, user_id: {user_id}")
+        
         return {
             'valid': True,
-            'tenant_id': item.get('tenant_id'),
-            'user_id': item.get('user_id'),
+            'tenant_id': tenant_id,
+            'user_id': user_id,
             'message': 'Token válido'
         }
         

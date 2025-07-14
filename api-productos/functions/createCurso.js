@@ -57,8 +57,19 @@ module.exports.createCurso = async (event) => {
     }
 
     // 5. Si el token es válido, obtener el tenant_id y proceder
+    console.log('Validation result:', JSON.stringify(validationResult, null, 2));
     const authorizerContext = JSON.parse(validationResult.body);
+    console.log('Authorizer context:', JSON.stringify(authorizerContext, null, 2));
     const tenantId = authorizerContext.tenant_id;
+    console.log('Extracted tenant_id:', tenantId);
+
+    if (!tenantId) {
+      return {
+        statusCode: 400,
+        headers: corsHeaders,
+        body: JSON.stringify({ message: 'No se pudo obtener tenant_id del token' }),
+      };
+    }
 
     console.log('Received event body:', event.body);
     const body = JSON.parse(event.body);
