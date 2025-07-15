@@ -68,7 +68,7 @@ module.exports.updateCurso = async (event) => {
     }
 
     const body = JSON.parse(event.body);
-    const { nombre, descripcion, duracion, imagen_url, categories, precio, rating } = body;
+    const { nombre, descripcion, instructor, duracion, imagen_url, categories, precio, rating, nivel } = body;
 
     // Construir la expresión de actualización dinámicamente
     let updateExpression = 'set ';
@@ -82,6 +82,10 @@ module.exports.updateCurso = async (event) => {
     if (descripcion !== undefined) {
       updates.push('descripcion = :d');
       expressionAttributeValues[':d'] = descripcion;
+    }
+    if (instructor !== undefined) {
+      updates.push('instructor = :inst');
+      expressionAttributeValues[':inst'] = instructor;
     }
     if (duracion !== undefined) {
       updates.push('duracion = :u');
@@ -102,6 +106,10 @@ module.exports.updateCurso = async (event) => {
     if (rating !== undefined) {
       updates.push('rating = :r');
       expressionAttributeValues[':r'] = rating;
+    }
+    if (nivel !== undefined) {
+      updates.push('nivel = :niv');
+      expressionAttributeValues[':niv'] = nivel;
     }
 
     if (updates.length === 0) {

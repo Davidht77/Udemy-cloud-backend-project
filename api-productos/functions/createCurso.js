@@ -73,16 +73,16 @@ module.exports.createCurso = async (event) => {
     console.log('Received event body:', event.body);
     const body = JSON.parse(event.body);
     console.log('Parsed event body:', body);
-    const { nombre, descripcion, duracion, imagen_url, categories, precio, rating } = body;
+    const { nombre, descripcion, instructor, duracion, imagen_url, categories, precio, rating, nivel } = body;
     const curso_id = uuidv4();
 
     // Validar que los campos requeridos existan
-    if (!nombre || !descripcion || !duracion || !imagen_url || !categories || !Array.isArray(categories) || categories.length === 0 || precio === undefined || rating === undefined) {
+    if (!nombre || !descripcion || !instructor || !duracion || !imagen_url || !categories || !Array.isArray(categories) || categories.length === 0 || precio === undefined || rating === undefined || !nivel) {
       return {
         statusCode: 400,
         headers: corsHeaders,
         body: JSON.stringify({
-          message: 'Faltan campos requeridos. Asegúrate de proporcionar nombre, descripcion, duracion, imagen_url, categories (como un array no vacío), precio y rating.',
+          message: 'Faltan campos requeridos. Asegúrate de proporcionar nombre, descripcion, instructor, duracion, imagen_url, categories (como un array no vacío), precio, rating y nivel.',
         }),
       };
     }
@@ -94,11 +94,13 @@ module.exports.createCurso = async (event) => {
         curso_id: curso_id,
         nombre: nombre,
         descripcion: descripcion,
+        instructor: instructor,
         duracion: duracion,
         imagen_url: imagen_url,
         categories: categories,
         precio: precio,
         rating: rating,
+        nivel: nivel,
       },
     };
 

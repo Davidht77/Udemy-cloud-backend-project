@@ -11,6 +11,11 @@ provider:
     statements:
       - Effect: Allow
         Action:
+          - lambda:InvokeFunction
+        Resource:
+          - arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
+      - Effect: Allow
+        Action:
           - dynamodb:PutItem
           - dynamodb:Query
         Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tablePrefix}_compras"
@@ -43,81 +48,20 @@ functions:
     handler: functions/createCompra.createCompra
     environment:
       COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras
+      STAGE: ${self:provider.stage}
     events:
       - http:
           path: /compras
           method: post
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - X-Auth-Token
-              - tenant-id
-            allowCredentials: true
-          environment:
-            COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras
-          authorizer:
-            name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
-            type: token
-      - http:
-          path: /compras
-          method: options  # preflight
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - tenant-id
-            allowCredentials: true
-      - http:
-          path: /compras
-          method: options  # preflight
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - Authorization
-              - X-Amz-Date
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - tenant-id
-            allowCredentials: true
+          cors: true
+
   listCompras:
     handler: functions/listCompras.listCompras
     environment:
       COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras
+      STAGE: ${self:provider.stage}
     events:
       - http:
           path: /compras
           method: get
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - X-Auth-Token
-              - tenant-id
-            allowCredentials: true
-          authorizer:
-            name: validarToken
-            arn: arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
-            resultTtlInSeconds: 0
-            identitySource: method.request.header.Authorization
-            type: token
+          cors: true
