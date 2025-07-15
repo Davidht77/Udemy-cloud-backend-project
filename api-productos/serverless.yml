@@ -66,17 +66,7 @@ functions:
       - http:
           path: /cursos
           method: post
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - tenant-id
-            allowCredentials: true
+          cors: true
 
   searchCursosByName:
     handler: functions/searchCursosByName.searchCursosByName
@@ -87,17 +77,7 @@ functions:
       - http:
           path: /cursos/search
           method: get
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - tenant-id
-            allowCredentials: true
+          cors: true
 
   searchCursosByCategory:
     handler: functions/searchCursosByCategory.searchCursosByCategory
@@ -108,17 +88,7 @@ functions:
       - http:
           path: /cursos/category
           method: get
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - tenant-id
-            allowCredentials: true
+          cors: true
 
   getCurso:
     handler: functions/getCurso.getCurso
@@ -129,17 +99,7 @@ functions:
       - http:
           path: /cursos/{id}
           method: get
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - tenant-id
-            allowCredentials: true
+          cors: true
 
   updateCurso:
     handler: functions/updateCurso.updateCurso
@@ -150,17 +110,7 @@ functions:
       - http:
           path: /cursos/{id}
           method: put
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - tenant-id
-            allowCredentials: true
+          cors: true
 
   deleteCurso:
     handler: functions/deleteCurso.deleteCurso
@@ -171,17 +121,7 @@ functions:
       - http:
           path: /cursos/{id}
           method: delete
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - tenant-id
-            allowCredentials: true
+          cors: true
             
   listCursos:
     handler: functions/listCursos.listCursos
@@ -192,17 +132,7 @@ functions:
       - http:
           path: /cursos
           method: get
-          cors:
-            origin: 'http://localhost:5173'
-            headers:
-              - Content-Type
-              - X-Amz-Date
-              - Authorization
-              - X-Api-Key
-              - X-Amz-Security-Token
-              - X-Amz-User-Agent
-              - tenant-id
-            allowCredentials: true
+          cors: true
 
   actualizarCursos:
     handler: functions/actualizarCursos.handler
