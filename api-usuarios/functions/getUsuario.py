@@ -25,14 +25,16 @@ def lambda_handler(event, context):
     
     try:
         # 1. Determinar si es invocación directa o desde API Gateway
-        is_direct_invocation = 'headers' in event and 'Authorization' in event.get('headers', {})
+        # Las invocaciones directas de Lambda NO tienen httpMethod, pathParameters, etc.
+        # Las invocaciones de API Gateway SÍ tienen estos campos
+        is_api_gateway_request = 'httpMethod' in event or 'requestContext' in event
         
-        if is_direct_invocation:
-            # Invocación directa desde otro Lambda
-            return handle_direct_invocation(event)
-        else:
+        if is_api_gateway_request:
             # Invocación desde API Gateway - necesitamos validar el token manualmente
             return handle_api_gateway_request(event)
+        else:
+            # Invocación directa desde otro Lambda
+            return handle_direct_invocation(event)
             
     except Exception as e:
         logger.error(f"❌ Error en getUsuario: {str(e)}")
