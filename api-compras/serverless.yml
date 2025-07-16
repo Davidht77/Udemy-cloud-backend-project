@@ -65,3 +65,6 @@ functions:
           path: /compras
           method: get
           cors: true
+  actualizarCompras:
+    handler: functions/actualizarCompras.actualizarCompras
+    runtime: python3.13
