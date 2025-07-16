@@ -20,19 +20,21 @@ def lambda_handler(event, context):
         else:
             body = event
 
-        # Obtener el email y el password del cuerpo parseado
+        # Obtener los campos del cuerpo parseado
         user_id = body.get('user_id')
         password = body.get('password')
         tenant_id = body.get('tenant_id')
-        # Campos adicionales (opcionales)
+        # Campos obligatorios
         nombre = body.get('nombre')
         apellido = body.get('apellido')
+        telefono = body.get('telefono')
+        # Campos adicionales (opcionales)
         titulo = body.get('titulo')
         biografia = body.get('biografia')
         idioma = body.get('idioma')
         
-        # Verificar que el email y el password existen
-        if user_id and password and tenant_id:
+        # Verificar que todos los campos obligatorios existen
+        if user_id and password and tenant_id and nombre and apellido and telefono:
             # Hashea la contraseña antes de almacenarla
             hashed_password = hash_password(password)
             # Conectar DynamoDB
@@ -44,11 +46,12 @@ def lambda_handler(event, context):
                 'user_id': user_id,
                 'password': hashed_password,
                 'tenant_id': tenant_id,
+                'nombre': nombre,
+                'apellido': apellido,
+                'telefono': telefono,
             }
 
             # Agregar campos opcionales si existen
-            if nombre: item['nombre'] = nombre
-            if apellido: item['apellido'] = apellido
             if titulo: item['titulo'] = titulo
             if biografia: item['biografia'] = biografia
             if idioma: item['idioma'] = idioma
@@ -60,8 +63,8 @@ def lambda_handler(event, context):
                 'statusCode': 200,
                 'headers': {
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': 'http://localhost:5173',
-                    'Access-Control-Allow-Credentials': True
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': 'true'
                 },
                 'body': json.dumps({'message': 'Usuario creado exitosamente', 'response': response}),
                 'isBase64Encoded': False
@@ -71,10 +74,10 @@ def lambda_handler(event, context):
                 'statusCode': 400,
                 'headers': {
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': 'http://localhost:5173',
-                    'Access-Control-Allow-Credentials': True
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': 'true'
                 },
-                'body': json.dumps({'error': 'Invalid request body: missing user_id, password or tenant_id'}),
+                'body': json.dumps({'error': 'Faltan campos obligatorios: user_id, password, tenant_id, nombre, apellido y telefono son requeridos'}),
                 'isBase64Encoded': False
             }
 
@@ -85,8 +88,8 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'headers': {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': 'http://localhost:5173',
-                'Access-Control-Allow-Credentials': True
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true'
             },
             'body': json.dumps({'error': str(e)}),
             'isBase64Encoded': False

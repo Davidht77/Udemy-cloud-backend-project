@@ -179,5 +179,15 @@ functions:
               - X-Amz-User-Agent
               - X-Auth-Token
             allowCredentials: true
-          
+
+  getUsuario:
+    handler: functions/getUsuario.lambda_handler
+    environment:
+      USER_TABLE_NAME: ${self:custom.tablePrefix}_user
+      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens
+    events:
+      - http:
+          path: /usuarios/me
+          method: get
+          cors: true
 
