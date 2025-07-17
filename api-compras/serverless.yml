@@ -8,28 +8,6 @@ provider:
   timeout: 30
   iam:
     role: arn:aws:iam::150209693186:role/LabRole
-    statements:
-      - Effect: Allow
-        Action:
-          - lambda:InvokeFunction
-        Resource:
-          - arn:aws:lambda:${self:provider.region}:${aws:accountId}:function:api-usuarios-${self:provider.stage}-validarToken
-      - Effect: Allow
-        Action:
-          - dynamodb:PutItem
-          - dynamodb:Query
-          - dynamodb:DescribeStream
-          - dynamodb:GetRecords
-          - dynamodb:GetShardIterator
-          - dynamodb:ListStreams
-        Resource: 
-          - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tablePrefix}_compras"
-          - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tablePrefix}_compras/stream/*"
-      - Effect: Allow
-        Action:
-          - s3:PutObject
-          - s3:GetObject
-        Resource: "arn:aws:s3:::${self:custom.bucketName}/*"
   stage: dev
   region: us-east-1
 
@@ -73,7 +51,6 @@ functions:
           path: /compras
           method: post
           cors: true
-          authorizer: false
 
   listCompras:
     handler: functions/listCompras.listCompras
@@ -85,7 +62,6 @@ functions:
           path: /compras
           method: get
           cors: true
-          authorizer: false
   actualizarCompras:
     handler: functions/actualizarCompras.lambda_handler
     runtime: python3.11
