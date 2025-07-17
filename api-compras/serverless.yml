@@ -1,4 +1,4 @@
-service: api-compras
+service: api-compras-v2
 
 frameworkVersion: '3'
 
