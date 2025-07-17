@@ -63,7 +63,7 @@ def lambda_handler(event, context):
                 'statusCode': 200,
                 'headers': {
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': 'http://udemyfront.s3-website-us-east-1.amazonaws.com',
+                    'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Credentials': 'true'
                 },
                 'body': json.dumps({'message': 'Usuario creado exitosamente', 'response': response}),
@@ -74,7 +74,7 @@ def lambda_handler(event, context):
                 'statusCode': 400,
                 'headers': {
                     'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': 'http://udemyfront.s3-website-us-east-1.amazonaws.com',
+                    'Access-Control-Allow-Origin': '*',
                     'Access-Control-Allow-Credentials': 'true'
                 },
                 'body': json.dumps({'error': 'Faltan campos obligatorios: user_id, password, tenant_id, nombre, apellido y telefono son requeridos'}),
@@ -88,7 +88,7 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'headers': {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': 'http://udemyfront.s3-website-us-east-1.amazonaws.com',
+                'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Credentials': 'true'
             },
             'body': json.dumps({'error': str(e)}),

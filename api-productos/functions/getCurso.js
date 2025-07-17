@@ -10,7 +10,7 @@ const STAGE = process.env.STAGE || 'dev';
 const VALIDADOR_FN_NAME = `api-usuarios-${STAGE}-validarToken`;
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': 'http://udemyfront.s3-website-us-east-1.amazonaws.com',
+  'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers':
     'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,tenant-id',
   'Access-Control-Allow-Methods': 'GET,OPTIONS',
