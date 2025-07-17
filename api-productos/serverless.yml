@@ -146,3 +146,16 @@ functions:
       ES_HOST: '34.206.17.81'  # IP de tu Elasticsearch
       ES_PORT: 9200
       ES_INDEX: 'productos'
+
+  searchProductos:
+    handler: functions/searchProductos.searchProductos
+    environment:
+      STAGE: ${self:provider.stage}
+      ES_HOST: '34.206.17.81'
+      ES_PORT: 9200
+      ES_INDEX: 'productos'
+    events:
+      - http:
+          path: /search
+          method: get
+          cors: true
