@@ -38,7 +38,7 @@ jobs:
         # Asegúrate de que estos nombres coincidan con tus carpetas reales
         run: |
           SERVICE_DIRS=(api-usuarios api-productos api-compras)
-          DEPLOY_STAGE="dev" # Define aquí la etapa de despliegue (dev, staging, prod)
+          DEPLOY_STAGE="test" # Define aquí la etapa de despliegue (dev, staging, prod)
 
           for service_dir in "${SERVICE_DIRS[@]}"; do
             echo "::group::Deploying service: $service_dir" # Esto crea un grupo colapsable en los logs de GitHub Actions
