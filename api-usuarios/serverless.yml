@@ -7,7 +7,7 @@ frameworkVersion: '3'
 
 provider:
   name: aws
-  runtime: python3.13
+  runtime: python3.11
   timeout: 30  
   iam:
     role: arn:aws:iam::150209693186:role/LabRole

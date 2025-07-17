@@ -35,7 +35,7 @@ provider:
 
 custom:
   tablePrefix: ${opt:stage, self:provider.stage}
-  bucketName: ${self:provider.stage}-comprass-udemy
+  bucketName: ${self:provider.stage}-compras-udemy
 
 resources:
   Resources:
@@ -86,7 +86,7 @@ functions:
           cors: true
   actualizarCompras:
     handler: functions/actualizarCompras.lambda_handler
-    runtime: python3.13
+    runtime: python3.11
     environment:
       BUCKET_NAME: ${self:custom.bucketName}
     events:
