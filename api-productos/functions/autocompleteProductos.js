@@ -74,7 +74,7 @@ module.exports.autocompleteProductos = async (event) => {
     // 6. Extraer el parámetro de autocompletado del query string
     const queryParams = event.queryStringParameters || {};
     const prefix = queryParams.q;
-    const size = parseInt(queryParams.size) || 5; // Número de sugerencias por defecto
+    const size = 10; // Número fijo de sugerencias
 
     if (!prefix) {
       return {
