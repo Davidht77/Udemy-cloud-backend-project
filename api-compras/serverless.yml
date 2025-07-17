@@ -73,6 +73,7 @@ functions:
           path: /compras
           method: post
           cors: true
+          authorizer: false
 
   listCompras:
     handler: functions/listCompras.listCompras
@@ -84,6 +85,7 @@ functions:
           path: /compras
           method: get
           cors: true
+          authorizer: false
   actualizarCompras:
     handler: functions/actualizarCompras.lambda_handler
     runtime: python3.11
