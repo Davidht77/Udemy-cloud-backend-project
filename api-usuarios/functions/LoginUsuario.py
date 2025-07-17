@@ -57,7 +57,9 @@ def lambda_handler(event, context):
             return {
                 'statusCode': 403,
                 'headers': {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Credentials': True
                 },
                 'body': json.dumps({'error': 'Password incorrecto'}),
             }
