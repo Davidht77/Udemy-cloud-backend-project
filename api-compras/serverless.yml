@@ -18,12 +18,24 @@ provider:
         Action:
           - dynamodb:PutItem
           - dynamodb:Query
-        Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tablePrefix}_compras"
+          - dynamodb:DescribeStream
+          - dynamodb:GetRecords
+          - dynamodb:GetShardIterator
+          - dynamodb:ListStreams
+        Resource: 
+          - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tablePrefix}_compras"
+          - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tablePrefix}_compras/stream/*"
+      - Effect: Allow
+        Action:
+          - s3:PutObject
+          - s3:GetObject
+        Resource: "arn:aws:s3:::${self:custom.bucketName}/*"
   stage: dev
   region: us-east-1
 
 custom:
   tablePrefix: ${opt:stage, self:provider.stage}
+  bucketName: ${self:provider.stage}-compras-udemy
 
 resources:
   Resources:
@@ -42,6 +54,13 @@ resources:
           - AttributeName: order_id
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
+
+    ComprasBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.bucketName}
 
 functions:
   createCompra:
@@ -66,5 +85,13 @@ functions:
           method: get
           cors: true
   actualizarCompras:
-    handler: functions/actualizarCompras.actualizarCompras
+    handler: functions/actualizarCompras.lambda_handler
     runtime: python3.13
+    environment:
+      BUCKET_NAME: ${self:custom.bucketName}
+    events:
+      - stream:
+          type: dynamodb
+          arn: arn:aws:dynamodb:us-east-1:150209693186:table/dev_cursos/stream/2025-07-13T20:47:08.739
+          batchSize: 1
+          startingPosition: TRIM_HORIZON
