@@ -91,15 +91,13 @@ module.exports.searchProductos = async (event) => {
     // 8. Reenviar la petición a Elasticsearch
     const elasticsearchResponse = await forwardToElasticsearch(elasticsearchQuery);
 
+    // 9. Formatear la respuesta para que sea consistente con el resto del API
+    const formattedResponse = formatSearchResponse(elasticsearchResponse, searchTerm, tenantId);
+
     return {
       statusCode: 200,
       headers: corsHeaders,
-      body: JSON.stringify({
-        message: 'Búsqueda realizada exitosamente',
-        search_term: searchTerm,
-        results: elasticsearchResponse,
-        tenant_id: tenantId
-      }),
+      body: JSON.stringify(formattedResponse),
     };
 
   } catch (error) {
@@ -134,6 +132,46 @@ function buildElasticsearchQuery(searchTerm, tenantId) {
         ]
       }
     }
+  };
+}
+
+/**
+ * Formatea la respuesta de Elasticsearch para que sea consistente con el resto del API
+ */
+function formatSearchResponse(elasticsearchResponse, searchTerm, tenantId) {
+  // Extraer los productos de la respuesta de Elasticsearch
+  const hits = elasticsearchResponse.hits?.hits || [];
+
+  // Transformar cada hit a formato de curso estándar
+  const cursos = hits.map(hit => {
+    const source = hit._source;
+    return {
+      curso_id: source.sku || hit._id,
+      tenant_id: tenantId,
+      nombre: source.nombre,
+      descripcion: source.descripcion,
+      instructor: source.instructor,
+      duracion: source.duracion,
+      imagen_url: source.imagen_url,
+      categories: source.categories,
+      precio: source.precio,
+      rating: source.rating,
+      nivel: source.nivel,
+      estudiantes: source.estudiantes
+    };
+  });
+
+  // Información de paginación y estadísticas
+  const total = elasticsearchResponse.hits?.total?.value || 0;
+  const took = elasticsearchResponse.took || 0;
+
+  return {
+    message: `Búsqueda completada para "${searchTerm}"`,
+    search_term: searchTerm,
+    total_results: total,
+    results_count: cursos.length,
+    search_time_ms: took,
+    cursos: cursos
   };
 }
 
