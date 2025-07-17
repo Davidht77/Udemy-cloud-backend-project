@@ -7,19 +7,31 @@ s3 = boto3.client('s3')
 BUCKET_NAME = os.environ['BUCKET_NAME']
 
 def lambda_handler(event, context):
+    print(f"🔍 Evento recibido: {json.dumps(event, default=str)}")
+    
     for record in event['Records']:
         try:
+            print(f"🔍 Procesando record: {json.dumps(record, default=str)}")
+            
             if record['eventName'] in ['INSERT', 'MODIFY']:
                 new_image = record['dynamodb']['NewImage']
+                print(f"🔍 NewImage: {json.dumps(new_image, default=str)}")
                 
-                # Extraer atributos
-                tenant_id = new_image['tenant_id']['S']
-                order_id = new_image['order_id']['S']
-                user_id = new_image['user_id']['S']
-                curso_id = new_image['curso_id']['S']
-                quantity = int(new_image['quantity']['N'])
-                price = float(new_image['price']['N'])
-                timestamp = new_image['timestamp']['S']
+                # Extraer atributos con manejo de errores
+                tenant_id = new_image.get('tenant_id', {}).get('S', 'unknown')
+                order_id = new_image.get('order_id', {}).get('S', 'unknown')
+                user_id = new_image.get('user_id', {}).get('S', 'unknown')
+                curso_id = new_image.get('curso_id', {}).get('S', 'unknown')
+                quantity = int(new_image.get('quantity', {}).get('N', '0'))
+                price = float(new_image.get('price', {}).get('N', '0.0'))
+                timestamp = new_image.get('timestamp', {}).get('S', datetime.now().isoformat())
+                
+                print(f"📊 Datos extraídos: tenant_id={tenant_id}, order_id={order_id}, user_id={user_id}")
+                
+                # Verificar que tenemos los datos mínimos necesarios
+                if tenant_id == 'unknown' or order_id == 'unknown':
+                    print(f"⚠️ Datos incompletos - tenant_id: {tenant_id}, order_id: {order_id}")
+                    continue
                 
                 # Armar el JSON de la compra
                 compra = {
