@@ -159,3 +159,16 @@ functions:
           path: /search
           method: get
           cors: true
+
+  autocompleteProductos:
+    handler: functions/autocompleteProductos.autocompleteProductos
+    environment:
+      STAGE: ${self:provider.stage}
+      ES_HOST: '34.206.17.81'
+      ES_PORT: 9200
+      ES_INDEX: 'productos'
+    events:
+      - http:
+          path: /autocomplete
+          method: get
+          cors: true
