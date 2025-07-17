@@ -70,6 +70,7 @@ functions:
     events:
       - stream:
           type: dynamodb
-          arn: arn:aws:dynamodb:us-east-1:150209693186:table/dev_compras/stream/2025-07-17T05:06:31.862
+          arn:
+            Fn::GetAtt: [ProdComprasTable, StreamArn]
           batchSize: 1
           startingPosition: TRIM_HORIZON
