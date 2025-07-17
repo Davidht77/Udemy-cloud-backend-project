@@ -182,24 +182,20 @@ function formatAutocompleteResponse(elasticsearchResponse, prefix, tenantId, siz
   const uniqueSuggestions = new Set(); // Para evitar duplicados
   const formattedSuggestions = [];
 
-  suggestions
-    .filter(suggestion => {
-      const source = suggestion._source || {};
-      // Filtrar solo sugerencias del tenant actual
-      const hasCorrectTenant = source.tenant_id === tenantId;
-      console.log(`Sugerencia "${suggestion.text}" - tenant_id: ${source.tenant_id}, esperado: ${tenantId}, incluir: ${hasCorrectTenant}`);
-      return hasCorrectTenant;
-    })
-    .forEach(suggestion => {
-      const suggestionText = suggestion.text;
+  // Procesar todas las sugerencias (sin filtro de tenant por ahora)
+  suggestions.forEach(suggestion => {
+    const suggestionText = suggestion.text;
+    console.log(`Procesando sugerencia: "${suggestionText}"`);
 
-      // Evitar duplicados (ya que pueden haber varios cursos con el mismo nombre)
-      if (!uniqueSuggestions.has(suggestionText) && formattedSuggestions.length < size) {
-        uniqueSuggestions.add(suggestionText);
-        formattedSuggestions.push(suggestionText);
-        console.log(`Agregada sugerencia: "${suggestionText}"`);
-      }
-    });
+    // Evitar duplicados (ya que pueden haber varios cursos con el mismo nombre)
+    if (!uniqueSuggestions.has(suggestionText) && formattedSuggestions.length < size) {
+      uniqueSuggestions.add(suggestionText);
+      formattedSuggestions.push(suggestionText);
+      console.log(`✅ Agregada sugerencia: "${suggestionText}"`);
+    } else {
+      console.log(`❌ Sugerencia duplicada o límite alcanzado: "${suggestionText}"`);
+    }
+  });
 
   return {
     message: `Autocompletado para "${prefix}"`,
