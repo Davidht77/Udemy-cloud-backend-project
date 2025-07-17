@@ -1,7 +1,7 @@
 service: api-usuarios
 
-plugins:
-  - serverless-aws-documentation
+# plugins:
+#   - serverless-aws-documentation
 
 frameworkVersion: '3'
 
@@ -16,61 +16,6 @@ provider:
 
 custom:
   tablePrefix: ${opt:stage, self:provider.stage}
-  documentation:
-    version: '1'
-    title: 'API de Usuarios'
-    description: 'API para gestionar usuarios, autenticación y tokens de acceso'
-    models:
-      - name: "UsuarioInput"
-        contentType: "application/json"
-        schema:
-          type: "object"
-          properties:
-            tenant_id:
-              type: "string"
-            user_id:
-              type: "string"
-            password:
-              type: "string"
-      - name: "LoginInput"
-        contentType: "application/json"
-        schema:
-          type: "object"
-          properties:
-            tenant_id:
-              type: "string"
-            user_id:
-              type: "string"
-            password:
-              type: "string"
-      - name: "TokenValidationInput"
-        contentType: "application/json"
-        schema:
-          type: "object"
-          properties:
-            token:
-              type: "string"
-      - name: "SuccessResponse"
-        contentType: "application/json"
-        schema:
-          type: "object"
-          properties:
-            message:
-              type: "string"
-      - name: "LoginSuccessResponse"
-        contentType: "application/json"
-        schema:
-          type: "object"
-          properties:
-            token:
-              type: "string"
-      - name: "ErrorResponse"
-        contentType: "application/json"
-        schema:
-          type: "object"
-          properties:
-            error:
-              type: "string"
 
 resources:
   Resources:
