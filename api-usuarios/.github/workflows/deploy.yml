@@ -33,7 +33,7 @@ jobs:
 
     - name: Deploy with Serverless
       working-directory: ./api-usuarios
-      run: sls deploy --stage test
+      run: sls deploy --stage prod
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
