@@ -30,7 +30,7 @@ provider:
           - s3:PutObject
           - s3:GetObject
         Resource: "arn:aws:s3:::${self:custom.bucketName}/*"
-  stage: dev
+  stage: test
   region: us-east-1
 
 custom:
