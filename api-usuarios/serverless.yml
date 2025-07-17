@@ -11,7 +11,7 @@ provider:
   timeout: 30  
   iam:
     role: arn:aws:iam::150209693186:role/LabRole
-  stage: test
+  stage: dev
   region: us-east-1
 
 custom:

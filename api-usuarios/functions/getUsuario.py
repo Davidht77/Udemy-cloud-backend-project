@@ -17,7 +17,7 @@ def lambda_handler(event, context):
         return {
             'statusCode': 200,
             'headers': {
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Origin': 'http://udemyfront.s3-website-us-east-1.amazonaws.com',
                 'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,tenant-id',
                 'Access-Control-Allow-Methods': 'GET,OPTIONS'
             },
@@ -42,7 +42,7 @@ def lambda_handler(event, context):
         return {
             'statusCode': 500,
             'headers': {
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Origin': 'http://udemyfront.s3-website-us-east-1.amazonaws.com',
                 'Access-Control-Allow-Credentials': 'true'
             },
             'body': json.dumps({'message': 'Error interno del servidor'})
@@ -97,7 +97,7 @@ def handle_api_gateway_request(event):
             return {
                 'statusCode': 401,
                 'headers': {
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': 'http://udemyfront.s3-website-us-east-1.amazonaws.com',
                     'Access-Control-Allow-Credentials': 'true'
                 },
                 'body': json.dumps({'message': 'Token de autorización no proporcionado'})
@@ -113,7 +113,7 @@ def handle_api_gateway_request(event):
             return {
                 'statusCode': 403,
                 'headers': {
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': 'http://udemyfront.s3-website-us-east-1.amazonaws.com',
                     'Access-Control-Allow-Credentials': 'true'
                 },
                 'body': json.dumps({'message': validation_result['message']})
@@ -129,7 +129,7 @@ def handle_api_gateway_request(event):
             return {
                 'statusCode': 200,
                 'headers': {
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': 'http://udemyfront.s3-website-us-east-1.amazonaws.com',
                     'Access-Control-Allow-Credentials': 'true'
                 },
                 'body': json.dumps({
@@ -141,7 +141,7 @@ def handle_api_gateway_request(event):
             return {
                 'statusCode': 404,
                 'headers': {
-                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Origin': 'http://udemyfront.s3-website-us-east-1.amazonaws.com',
                     'Access-Control-Allow-Credentials': 'true'
                 },
                 'body': json.dumps({'message': 'Usuario no encontrado'})
@@ -152,7 +152,7 @@ def handle_api_gateway_request(event):
         return {
             'statusCode': 500,
             'headers': {
-                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Origin': 'http://udemyfront.s3-website-us-east-1.amazonaws.com',
                 'Access-Control-Allow-Credentials': 'true'
             },
             'body': json.dumps({'message': 'Error interno del servidor'})

@@ -33,7 +33,7 @@ def lambda_handler(event, context):
             'statusCode': 403,
             'headers': {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': 'http://localhost:5173',
+                'Access-Control-Allow-Origin': 'http://udemyfront.s3-website-us-east-1.amazonaws.com',
                 'Access-Control-Allow-Credentials': True
             },
             'body': json.dumps({'error': 'Usuario no existe'}),
@@ -67,7 +67,7 @@ def lambda_handler(event, context):
         'statusCode': 200,
         'headers': {
             'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': 'http://localhost:5173',
+            'Access-Control-Allow-Origin': 'http://udemyfront.s3-website-us-east-1.amazonaws.com',
             'Access-Control-Allow-Credentials': True
         },
         'body': json.dumps({

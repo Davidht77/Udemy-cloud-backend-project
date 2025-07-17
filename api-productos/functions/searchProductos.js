@@ -13,7 +13,7 @@ const ES_PORT = process.env.ES_PORT || 9200;
 const ES_INDEX = process.env.ES_INDEX || 'productos';
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': 'http://udemyfront.s3-website-us-east-1.amazonaws.com',
   'Access-Control-Allow-Credentials': 'true',
   'Access-Control-Allow-Headers':
     'Content-Type,Authorization,X-Amz-Date,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,tenant-id',
