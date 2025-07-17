@@ -35,7 +35,7 @@ provider:
 
 custom:
   tablePrefix: ${opt:stage, self:provider.stage}
-  bucketName: ${self:provider.stage}-compras-udemy
+  bucketName: ${self:provider.stage}-comprass-udemy
 
 resources:
   Resources:
