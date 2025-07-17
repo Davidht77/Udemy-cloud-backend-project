@@ -106,7 +106,7 @@ module.exports.autocompleteProductos = async (event) => {
     const elasticsearchResponse = await forwardToElasticsearch(elasticsearchQuery);
 
     // 9. Formatear la respuesta para que sea consistente con el resto del API
-    const formattedResponse = formatAutocompleteResponse(elasticsearchResponse, prefix, tenantId);
+    const formattedResponse = formatAutocompleteResponse(elasticsearchResponse, prefix, tenantId, size);
 
     return {
       statusCode: 200,
@@ -119,9 +119,9 @@ module.exports.autocompleteProductos = async (event) => {
     return {
       statusCode: 500,
       headers: corsHeaders,
-      body: JSON.stringify({ 
-        message: 'Error interno del servidor', 
-        error: error.message 
+      body: JSON.stringify({
+        message: 'Error interno del servidor',
+        error: error.message
       }),
     };
   }
@@ -133,6 +133,21 @@ module.exports.autocompleteProductos = async (event) => {
  * Pero también incluye filtro de tenant_id
  */
 function buildAutocompleteQuery(prefix, size, tenantId) {
+  // Versión sin contextos (si tu índice no los soporta)
+  return {
+    suggest: {
+      my_suggestions: {
+        prefix: prefix,
+        completion: {
+          field: "nombre.completion_suggester",
+          size: size * 2 // Pedimos más para filtrar después
+        }
+      }
+    }
+  };
+
+  // Versión con contextos (descomenta si tu índice los soporta)
+  /*
   return {
     suggest: {
       my_suggestions: {
@@ -141,40 +156,50 @@ function buildAutocompleteQuery(prefix, size, tenantId) {
           field: "nombre.completion_suggester",
           size: size,
           contexts: {
-            tenant_id: [tenantId] // Filtro de tenant_id en el contexto
+            tenant_id: [tenantId]
           }
         }
       }
     }
   };
+  */
 }
 
 /**
  * Formatea la respuesta de autocompletado de Elasticsearch para que sea consistente con el resto del API
  */
-function formatAutocompleteResponse(elasticsearchResponse, prefix, tenantId) {
+function formatAutocompleteResponse(elasticsearchResponse, prefix, tenantId, size) {
+  console.log('Formateando respuesta de autocompletado:', JSON.stringify(elasticsearchResponse, null, 2));
+
   // Extraer las sugerencias de la respuesta de Elasticsearch
-  const suggestions = elasticsearchResponse.suggest?.my_suggestions?.[0]?.options || [];
-  
-  // Transformar cada sugerencia a formato limpio
-  const formattedSuggestions = suggestions.map(suggestion => {
-    const source = suggestion._source || {};
-    return {
-      text: suggestion.text,
-      score: suggestion._score,
-      curso: {
-        curso_id: source.sku || suggestion._id,
-        tenant_id: tenantId,
-        nombre: source.nombre,
-        instructor: source.instructor,
-        duracion: source.duracion,
-        precio: source.precio,
-        rating: source.rating,
-        nivel: source.nivel,
-        imagen_url: source.imagen_url
+  // La estructura es: suggest.my_suggestions[0].options
+  const suggestionGroup = elasticsearchResponse.suggest?.my_suggestions?.[0];
+  const suggestions = suggestionGroup?.options || [];
+
+  console.log(`Encontradas ${suggestions.length} sugerencias para "${prefix}"`);
+
+  // Filtrar por tenant_id y extraer solo el texto de las sugerencias
+  const uniqueSuggestions = new Set(); // Para evitar duplicados
+  const formattedSuggestions = [];
+
+  suggestions
+    .filter(suggestion => {
+      const source = suggestion._source || {};
+      // Filtrar solo sugerencias del tenant actual
+      const hasCorrectTenant = source.tenant_id === tenantId;
+      console.log(`Sugerencia "${suggestion.text}" - tenant_id: ${source.tenant_id}, esperado: ${tenantId}, incluir: ${hasCorrectTenant}`);
+      return hasCorrectTenant;
+    })
+    .forEach(suggestion => {
+      const suggestionText = suggestion.text;
+
+      // Evitar duplicados (ya que pueden haber varios cursos con el mismo nombre)
+      if (!uniqueSuggestions.has(suggestionText) && formattedSuggestions.length < size) {
+        uniqueSuggestions.add(suggestionText);
+        formattedSuggestions.push(suggestionText);
+        console.log(`Agregada sugerencia: "${suggestionText}"`);
       }
-    };
-  });
+    });
 
   return {
     message: `Autocompletado para "${prefix}"`,
