@@ -8,6 +8,25 @@ provider:
   timeout: 30
   iam:
     role: arn:aws:iam::150209693186:role/LabRole
+    statements:
+      - Effect: Allow
+        Action:
+          - dynamodb:PutItem
+          - dynamodb:Query
+          - dynamodb:GetItem
+          - dynamodb:DescribeStream
+          - dynamodb:GetRecords
+          - dynamodb:GetShardIterator
+          - dynamodb:ListStreams
+        Resource: 
+          - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tablePrefix}_compras"
+          - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tablePrefix}_accessTokens"
+          - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tablePrefix}_compras/stream/*"
+      - Effect: Allow
+        Action:
+          - s3:PutObject
+          - s3:GetObject
+        Resource: "arn:aws:s3:::${self:custom.bucketName}/*"
   stage: dev
   region: us-east-1
 
@@ -45,6 +64,7 @@ functions:
     handler: functions/createCompra.createCompra
     environment:
       COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras
+      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens
       STAGE: ${self:provider.stage}
     events:
       - http:
@@ -56,6 +76,7 @@ functions:
     handler: functions/listCompras.listCompras
     environment:
       COMPRAS_TABLE_NAME: ${self:custom.tablePrefix}_compras
+      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens
       STAGE: ${self:provider.stage}
     events:
       - http:

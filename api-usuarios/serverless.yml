@@ -57,11 +57,6 @@ functions:
           path: /usuarios/register
           method: post
           cors: true
-          
-      - http:
-          path: /usuarios/validarToken
-          method: options  # preflight
-          cors: true
 
   loginUsuario:
     handler: functions/LoginUsuario.lambda_handler
@@ -74,17 +69,6 @@ functions:
           method: post
           cors: true
           
-
-  validarToken:
-    handler: functions/ValidarTokenAcceso.lambda_handler
-    environment:
-      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens
-    events:
-      - http:
-          path: /usuarios/validarToken
-          method: post
-          cors: true
-
   getUsuario:
     handler: functions/getUsuario.lambda_handler
     environment:

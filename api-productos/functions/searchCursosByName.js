@@ -2,11 +2,10 @@
 
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const lambda = new AWS.Lambda();
+const { validateTokenDirect } = require('./utils/tokenValidator');
 
 const TABLE_NAME = process.env.CURSOS_TABLE_NAME;
-const STAGE = process.env.STAGE || 'dev';
-const VALIDADOR_FN_NAME = `api-usuarios-${STAGE}-validarToken`;
+const ACCESS_TOKEN_TABLE_NAME = process.env.ACCESS_TOKEN_TABLE_NAME;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -36,27 +35,20 @@ module.exports.searchCursosByName = async (event) => {
       };
     }
 
-    // 3. Invocar la función Lambda validadora
-    const validationResponse = await lambda.invoke({
-      FunctionName: VALIDADOR_FN_NAME,
-      InvocationType: 'RequestResponse',
-      Payload: JSON.stringify({ headers: { Authorization: token } }),
-    }).promise();
-
-    const validationResult = JSON.parse(validationResponse.Payload);
+    // 3. Validar el token directamente contra DynamoDB
+    const validationResult = await validateTokenDirect(token, ACCESS_TOKEN_TABLE_NAME);
 
     // 4. Verificar si el token es válido
-    if (validationResult.statusCode !== 200) {
+    if (!validationResult.valid) {
       return {
         statusCode: 403,
         headers: corsHeaders,
-        body: JSON.stringify({ message: 'Token inválido o expirado' }),
+        body: JSON.stringify({ message: validationResult.message }),
       };
     }
 
     // 5. Si el token es válido, obtener el tenant_id y proceder
-    const authorizerContext = JSON.parse(validationResult.body);
-    const tenantId = authorizerContext.tenant_id;
+    const tenantId = validationResult.tenant_id;
     const { name, limit, lastEvaluatedKey } = event.queryStringParameters || {};
 
     if (!name) {

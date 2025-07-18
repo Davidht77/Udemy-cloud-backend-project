@@ -30,6 +30,7 @@ provider:
         Resource:
           - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tablePrefix}_cursos"
           - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tablePrefix}_user"
+          - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tablePrefix}_accessTokens"
           - "arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.tablePrefix}_cursos/stream/*"
   stage: dev
   region: us-east-1 #
@@ -61,6 +62,7 @@ functions:
     environment:
       CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
       USERS_TABLE_NAME: ${self:custom.tablePrefix}_user
+      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens
       STAGE: ${self:provider.stage}
     events:
       - http:
@@ -72,6 +74,7 @@ functions:
     handler: functions/searchCursosByName.searchCursosByName
     environment:
       CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
+      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens
       STAGE: ${self:provider.stage}
     events:
       - http:
@@ -83,6 +86,7 @@ functions:
     handler: functions/searchCursosByCategory.searchCursosByCategory
     environment:
       CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
+      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens
       STAGE: ${self:provider.stage}
     events:
       - http:
@@ -94,6 +98,7 @@ functions:
     handler: functions/getCurso.getCurso
     environment:
       CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
+      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens
       STAGE: ${self:provider.stage}
     events:
       - http:
@@ -105,6 +110,7 @@ functions:
     handler: functions/updateCurso.updateCurso
     environment:
       CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
+      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens
       STAGE: ${self:provider.stage}
     events:
       - http:
@@ -116,6 +122,7 @@ functions:
     handler: functions/deleteCurso.deleteCurso
     environment:
       CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
+      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens
       STAGE: ${self:provider.stage}
     events:
       - http:
@@ -127,6 +134,7 @@ functions:
     handler: functions/listCursos.listCursos
     environment:
       CURSOS_TABLE_NAME: ${self:custom.tablePrefix}_cursos
+      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens
       STAGE: ${self:provider.stage}
     events:
       - http:
@@ -150,6 +158,7 @@ functions:
   searchProductos:
     handler: functions/searchProductos.searchProductos
     environment:
+      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens
       STAGE: ${self:provider.stage}
       ES_HOST: '34.206.17.81'
       ES_PORT: 9200
@@ -163,6 +172,7 @@ functions:
   autocompleteProductos:
     handler: functions/autocompleteProductos.autocompleteProductos
     environment:
+      ACCESS_TOKEN_TABLE_NAME: ${self:custom.tablePrefix}_accessTokens
       STAGE: ${self:provider.stage}
       ES_HOST: '34.206.17.81'
       ES_PORT: 9200
