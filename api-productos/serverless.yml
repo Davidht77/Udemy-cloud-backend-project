@@ -7,7 +7,7 @@ provider:
   runtime: nodejs18.x # o la versión de Node.js que prefieras
   timeout: 30  
   iam:
-    role: arn:aws:iam::150209693186:role/LabRole
+    role: arn:aws:iam::244763382664:role/LabRole
     # Añadir permisos para DynamoDB
     statements:
       - Effect: Allow
@@ -55,6 +55,8 @@ resources:
           - AttributeName: curso_id
             KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
 
 functions:
   createCurso:
@@ -147,7 +149,8 @@ functions:
     events:
       - stream:
           type: dynamodb
-          arn: arn:aws:dynamodb:us-east-1:150209693186:table/dev_cursos/stream/2025-07-13T20:47:08.739
+          arn: 
+            Fn::GetAtt: [CursosTable, StreamArn]
           batchSize: 5
           startingPosition: LATEST
     environment:

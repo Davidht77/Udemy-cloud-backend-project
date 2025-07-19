@@ -2,10 +2,8 @@
 
 const AWS = require('aws-sdk');
 const dynamodb = new AWS.DynamoDB.DocumentClient();
-const { validateTokenDirect } = require('./utils/tokenValidator');
 
 const TABLE_NAME = process.env.CURSOS_TABLE_NAME;
-const ACCESS_TOKEN_TABLE_NAME = process.env.ACCESS_TOKEN_TABLE_NAME;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -25,37 +23,23 @@ module.exports.searchCursosByCategory = async (event) => {
   }
 
   try {
-    // 2. Extraer el token de autorización
-    const token = event.headers && event.headers.Authorization;
-    if (!token) {
-      return {
-        statusCode: 401,
-        headers: corsHeaders,
-        body: JSON.stringify({ message: 'Token de autorización no proporcionado' }),
-      };
-    }
-
-    // 3. Validar el token directamente contra DynamoDB
-    const validationResult = await validateTokenDirect(token, ACCESS_TOKEN_TABLE_NAME);
-
-    // 4. Verificar si el token es válido
-    if (!validationResult.valid) {
-      return {
-        statusCode: 403,
-        headers: corsHeaders,
-        body: JSON.stringify({ message: validationResult.message }),
-      };
-    }
-
-    // 5. Si el token es válido, obtener el tenant_id y proceder
-    const tenantId = validationResult.tenant_id;
+    // 2. Obtener parámetros de la consulta
     const category = event.queryStringParameters ? event.queryStringParameters.category : null;
+    const tenantId = event.queryStringParameters ? event.queryStringParameters.tenant_id : null;
 
     if (!category) {
       return {
         statusCode: 400,
         headers: corsHeaders,
         body: JSON.stringify({ message: 'Falta el parámetro category para la búsqueda' }),
+      };
+    }
+
+    if (!tenantId) {
+      return {
+        statusCode: 400,
+        headers: corsHeaders,
+        body: JSON.stringify({ message: 'Falta el parámetro tenant_id para la búsqueda' }),
       };
     }
 
